@@ -10,21 +10,21 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 - [x] Write AGENTS.md with the complete non-negotiable rules
 - [x] Create docs/HISTORY.md and record the first commits
 - [x] Create docs/FILEMAP.md and register every file
-- [ ] Create README.md with full product description
-- [ ] Create docs/ARCHITECTURE.md (stack, data model, pipeline)
-- [ ] Create docs/SECURITY.md (threat model outline)
-- [ ] Create docs/DATA_SOURCES.md (registry of sources, status pending verification)
-- [ ] Create docs/API.md (placeholder for future public API)
-- [ ] Create docs/STRATEGY.md (competitor analysis, positioning, pricing logic, keyword map)
-- [ ] Create docs/SEO_AEO.md (initial SEO/AEO specification)
-- [ ] Create docs/BACKLINKS.md (empty tracker ready for assets)
-- [ ] Create docs/DECISIONS.md (record stack and pricing decisions)
-- [ ] Update FILEMAP and HISTORY for every file
-- [ ] Tag phase-0-done when complete
+- [x] Create README.md with full product description
+- [x] Create docs/ARCHITECTURE.md (stack, data model, pipeline)
+- [x] Create docs/SECURITY.md (threat model outline)
+- [x] Create docs/DATA_SOURCES.md (registry of sources, status pending verification)
+- [x] Create docs/API.md (placeholder for future public API)
+- [x] Create docs/STRATEGY.md (competitor analysis, positioning, pricing logic, keyword map)
+- [x] Create docs/SEO_AEO.md (initial SEO/AEO specification)
+- [x] Create docs/BACKLINKS.md (empty tracker ready for assets)
+- [x] Create docs/DECISIONS.md (record stack and pricing decisions)
+- [x] Update FILEMAP and HISTORY for every file
+- [x] Tag phase-0-done when complete
 
 **Acceptance criteria:** All fixed docs exist, FILEMAP lists them, HISTORY has an entry for each commit, no em dashes, no placeholders that violate the banned list.
 
-**Status:** in progress
+**Status:** done
 
 **Blockers:** none
 
