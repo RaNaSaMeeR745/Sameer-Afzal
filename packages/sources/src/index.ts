@@ -19,6 +19,13 @@ export {
 } from "./overpass.js";
 
 export {
+  OsmAgencyAdapter,
+  buildOverpassAgencyQuery,
+  DEFAULT_OFFICE_TAGS,
+  type OsmAgencyAdapterOptions,
+} from "./osm-agency.js";
+
+export {
   CompaniesHouseAdapter,
   type CompaniesHouseAdapterOptions,
 } from "./companies-house.js";
@@ -50,3 +57,9 @@ export {
   mapMetaAd,
   type MetaAdLibraryAdapterOptions,
 } from "./meta-ad-library.js";
+
+export {
+  BraveSearchAdapter,
+  mapBraveResult,
+  type BraveSearchAdapterOptions,
+} from "./brave-search.js";
