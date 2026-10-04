@@ -1,0 +1,28 @@
+{
+  "name": "@scoutline/worker",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo \"lint not configured yet\"",
+    "test": "echo \"no tests yet\""
+  },
+  "dependencies": {
+    "@scoutline/core": "workspace:*",
+    "@scoutline/db": "workspace:*",
+    "@scoutline/sources": "workspace:*",
+    "@scoutline/enrich": "workspace:*",
+    "@scoutline/audit": "workspace:*",
+    "@scoutline/ai": "workspace:*",
+    "@scoutline/billing": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
