@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@scoutline/core": "workspace:*",
+    "@scoutline/db": "workspace:*",
+    "better-auth": "^1.2.8",
     "next": "^15.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
