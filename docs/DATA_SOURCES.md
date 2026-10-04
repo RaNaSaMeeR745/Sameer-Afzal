@@ -6,30 +6,35 @@ Every source must be verified against current official documentation and terms b
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Read-only public instances. Require identifying User-Agent. Cache and rate-limit. On HTTP 429 or 406 pause 30s. Commercial regular use should prefer self-hosted or paid Overpass. ODbL attribution required for derived products. | Main instance (overpass-api.de): guideline under ~10,000 queries and ~1 GB/day for one-off use; for regular app use divide by ~100 (~100 queries and ~10 MB/day). No parallel multi-script hammering. | Global | 2026-10-04 | implemented |
+| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Read-only public instances. Require identifying User-Agent. Cache and rate-limit. On HTTP 429 or 406 pause 30s. Commercial regular use should prefer self-hosted or paid Overpass. ODbL attribution required for derived products. | Main instance: ~10,000 queries and ~1 GB/day one-off; regular apps ~100 queries and ~10 MB/day. | Global | 2026-10-04 | implemented |
 | Google Places API | Official Google docs | Strict terms, no resale outside allowed use | Paid, BYOK only | Global | pending | candidate (BYOK) |
 | Foursquare Places API | Official docs | Check current terms | Free tier exists, verify | Global | pending | candidate (BYOK) |
 | Yelp Fusion | Official docs | Paid, no free tier currently | Paid | Limited | pending | candidate (BYOK) |
-
-### OpenStreetMap Overpass verification notes (2026-10-04)
-
-- Endpoint used: `https://overpass-api.de/api/interpreter` (configurable).
-- Adapter: `packages/sources/src/overpass.ts` (`OverpassAdapter`).
-- Sends `User-Agent: Scoutline/0.0.1 (...)` on every request.
-- Maps named amenity/shop nodes and ways to `SourceCandidate` with OSM registry id and evidence URL.
-- Throws on 429/406 with guidance to pause 30 seconds.
-- Production volume must stay within fair-use; heavy commercial workloads should move to self-hosted or paid Overpass (Geofabrik, Mapsource, Overspan, etc.).
-- OSM editing API (api.openstreetmap.org) is not used: it is for map editing only, not bulk read.
 
 ## New business and funding signals
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| UK Companies House API | https://developer.company-information.service.gov.uk/ | Free for registered users | Free | UK | pending Phase 6 | candidate |
-| US SEC EDGAR | https://www.sec.gov/edgar | Public data, fair use | Free | US | pending Phase 6 | candidate |
+| UK Companies House API | https://developer.company-information.service.gov.uk/ | Free public data API with registered API key. HTTP Basic (key as username). Do not embed keys in client code. | 600 requests per 5-minute window per application. HTTP 429 when exceeded. | UK | 2026-10-04 | implemented |
+| US SEC EDGAR | https://www.sec.gov/edgar and efts.sec.gov | Public filings. Fair access: identify with User-Agent including contact email. No API key. | Max 10 requests per second. No daily quota. Exceeding can yield 403/429 and temporary IP block. | US | 2026-10-04 | implemented |
 | Certificate Transparency (crt.sh) | https://crt.sh | Public logs | Free, rate limits apply | Global | pending Phase 7 | candidate |
 | Product Hunt API | Official docs | Check terms | Free tier verify | Global | pending | candidate |
 | OpenCorporates | Official docs | Limited free access | Limited | Multi-country | pending | candidate |
+
+### UK Companies House verification notes (2026-10-04)
+
+- Docs: developer.company-information.service.gov.uk developer guidelines and rate limiting.
+- Adapter: `packages/sources/src/companies-house.ts` (`CompaniesHouseAdapter`).
+- Requires `COMPANIES_HOUSE_API_KEY` (env name only in .env.example).
+- Search: `/search/companies?q=` and advanced `/advanced-search/companies?incorporated_from=`.
+- Evidence URL points to find-and-update.company-information.service.gov.uk.
+
+### US SEC EDGAR verification notes (2026-10-04)
+
+- Fair access: User-Agent with app name and contact; max 10 req/s; no key.
+- Adapter: `packages/sources/src/edgar.ts` (`EdgarAdapter`).
+- Endpoint: `https://efts.sec.gov/LATEST/search-index` (full-text search).
+- Dedupes hits by CIK. Evidence URL uses sec.gov browse-edgar by CIK.
 
 ## Hiring signals
 
@@ -45,8 +50,8 @@ Every source must be verified against current official documentation and terms b
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Meta Ad Library | Official API docs | Regional coverage, commercial data limited | Free API where available | Regional | pending Phase 9 | candidate |
-| Google Ads Transparency Center | No official API | Manual assist only unless terms change | N/A | Global | pending | rejected (no official API) |
+| Meta Ad Library | Official API docs | Regional coverage | Free API where available | Regional | pending Phase 9 | candidate |
+| Google Ads Transparency Center | No official API | Manual assist only | N/A | Global | pending | rejected (no official API) |
 
 ## Agency discovery
 
@@ -54,11 +59,11 @@ Every source must be verified against current official documentation and terms b
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
 | Brave Search API / Serper / SerpAPI | Official | BYOK | Free tiers vary | Global | pending Phase 10 | candidate (BYOK) |
 | OSM advertising/marketing categories | Overpass | Same as OSM | Free | Global | pending | candidate |
-| Clutch / Sortlist / DesignRush | Site terms | Automated access usually forbidden | N/A | Global | pending | candidate (manual validation only if terms forbid) |
+| Clutch / Sortlist / DesignRush | Site terms | Automated access usually forbidden | N/A | Global | pending | candidate (manual only if terms forbid) |
 
 ## Contact discovery and verification
 
-Public contact pages, mailto links, structured data, team pages on the entity's own site only. Role address patterns suggested but never sent unverified. Syntax, MX, disposable, catch-all heuristics. Optional BYOK (Hunter, Apollo) using tenant key.
+Public contact pages, mailto links, structured data, team pages on the entity's own site only. Optional BYOK (Hunter, Apollo) using tenant key.
 
 ## Explicitly excluded
 
