@@ -36,24 +36,22 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 
 ## Phase 8: Hiring signal adapters (HN Algolia and Adzuna)
 
-**Goal:** Verify and implement hiring-signal sources for hiring_company mode.
+**Status:** done
+
+## Phase 9: Meta Ad Library adapter
+
+**Goal:** Verify Meta Ad Library API terms and implement advertising-signal discovery.
 
 **Tasks:**
-- [x] Verify HN Algolia public API
-- [x] Verify Adzuna terms, limits, and commercial licence caution
-- [x] HnAlgoliaAdapter + unit tests
-- [x] AdzunaAdapter + unit tests
+- [x] Verify ads_archive docs, access (token + identity), regional coverage, rate limits
+- [x] MetaAdLibraryAdapter + unit tests
 - [x] Update DATA_SOURCES, .env.example, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none (Adzuna commercial scale may need a written licence per their ToS)
+**Blockers:** none for code. Runtime requires a verified Meta developer identity and access token. Commercial ad API coverage is strongest in EU/UK.
 
-## Phase 9: Meta Ad Library adapter (verify terms first)
-
-**Status:** not started
-
-## Phase 10-11: Remaining verified sources
+## Phase 10-11: Remaining verified sources (BYOK search, OSM agency categories)
 
 **Status:** not started
 
