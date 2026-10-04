@@ -26,3 +26,11 @@ export {
   subscriptions,
   billingEvents,
 } from "./tenant.js";
+
+export {
+  user,
+  session,
+  account,
+  verification,
+  twoFactor,
+} from "./auth.js";
