@@ -28,18 +28,20 @@ Achieved: OverpassAdapter with verified fair-use handling.
 
 ## 2026-10-04 | phase-6 | UK Companies House and SEC EDGAR adapters
 
-Goal: New-business and filing signal sources with verified terms.
+Achieved: CompaniesHouseAdapter and EdgarAdapter with verified limits.
+
+## 2026-10-04 | phase-7 | Certificate Transparency crt.sh adapter
+
+Goal: Discover domains from public CT logs as a new-site signal.
 
 Done:
-- Companies House: verified 600 req/5min, free API key, Basic auth (developer.company-information.service.gov.uk, 2026-10-04). Adapter supports search and advanced incorporated_from.
-- EDGAR: verified User-Agent + 10 req/s fair access, no key (efts.sec.gov, 2026-10-04). Adapter searches filings and dedupes by CIK.
-- DiscoverInput extended with optional query, incorporatedSince, limit; bbox optional for registry sources.
-- Unit tests with mocked fetch for both adapters.
-- COMPANIES_HOUSE_API_KEY added to .env.example (name only).
-- DATA_SOURCES.md statuses set to implemented with verification notes.
+- Verified crt.sh public JSON search (`/?q=&output=json`), no API key. Historical operator rate guidance ~60 requests per IP per minute; service may return 50x under load.
+- packages/sources/src/crtsh.ts: CrtShAdapter, mapCrtShRow (skips wildcards, dedupes hostnames, filters not_before via incorporatedSince)
+- packages/sources/src/crtsh.test.ts: unit tests with mocked fetch
+- DATA_SOURCES.md: crt.sh status implemented with verification notes
 
-Achieved: Three free sources implemented (Overpass, Companies House, EDGAR).
+Achieved: Four free sources implemented (Overpass, Companies House, EDGAR, crt.sh).
 
-Problems: Live API calls not run in agent environment. Companies House needs a registered key before production use.
+Problems: Live crt.sh not called in agent environment.
 
-Next: Phase 7 (Certificate Transparency crt.sh).
+Next: Phase 8 (hiring signal adapters).
