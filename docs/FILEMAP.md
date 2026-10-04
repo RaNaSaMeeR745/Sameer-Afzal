@@ -1,21 +1,19 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## apps/worker (Phase 14)
+## packages/enrich (Phase 15)
 
 | Path | Purpose |
 |------|---------|
-| apps/worker/src/queues.ts | Queue names and job payloads |
-| apps/worker/src/redis.ts | Redis connection |
-| apps/worker/src/jobs/discover.ts | Discover processor + adapter factory |
-| apps/worker/src/jobs/audit.ts | Audit processor |
-| apps/worker/src/jobs/score.ts | Score processor |
-| apps/worker/src/jobs/discover.test.ts | Adapter routing tests |
-| apps/worker/src/index.ts | Worker entrypoint |
+| packages/enrich/src/fetch.ts | Polite fetch + robots |
+| packages/enrich/src/contacts.ts | Public contact extraction |
+| packages/enrich/src/tech.ts | Tech fingerprint |
+| packages/enrich/src/enrich.ts | enrichEntity |
+| packages/enrich/src/*.test.ts | Unit tests |
 
-## packages
+## apps/worker
 
-- core: modes, services, types, scoring
-- sources: nine adapters
-- audit: runAudit checks
-- db: schema + RLS
-- apps/web: Better Auth
+queues, redis, jobs/discover, enrich, audit, score, index (Phases 14-15)
+
+## packages/core, sources, audit, db; apps/web
+
+Prior phases 0-13
