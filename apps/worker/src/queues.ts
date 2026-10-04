@@ -28,9 +28,7 @@ export const DEFAULT_JOB_OPTIONS = {
 export interface DiscoverJobData {
   tenantId: string;
   searchId: string;
-  /** Adapter id, e.g. openstreetmap_overpass. */
   sourceId: string;
-  /** Serialized DiscoverInput fields. */
   query?: string;
   categories?: string[];
   bbox?: {
@@ -67,4 +65,34 @@ export interface ScoreJobData {
   freshnessClass: "fresh" | "contested" | "served";
   entityCountry?: string | null;
   entityCategory?: string | null;
+}
+
+export interface ProveJobData {
+  tenantId: string;
+  entityId: string;
+  leadId: string;
+  entityName: string;
+  entityDomain: string | null;
+  entityUrl: string | null;
+  serviceLabel: string | null;
+  freshnessClass: "fresh" | "contested" | "served";
+  score: number;
+  breakdown: {
+    need: number;
+    timing: number;
+    budget: number;
+    reach: number;
+    fit: number;
+    evidenceLinks: string[];
+    notes: string[];
+  };
+  findings: Array<{
+    code: string;
+    severity: "info" | "low" | "medium" | "high" | "critical";
+    title: string;
+    detail: string;
+    evidenceUrl: string | null;
+    serviceKeys: string[];
+  }>;
+  preparedBy?: string;
 }
