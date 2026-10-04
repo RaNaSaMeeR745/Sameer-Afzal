@@ -4,24 +4,22 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 | phase-1 through phase-13 | monorepo through audit engine
+## 2026-10-04 | phase-1 through phase-14 | monorepo through BullMQ workers
 
-Achieved: Sources, scoring, audit, auth, db.
+Achieved: Sources, scoring, audit, discover/audit/score workers.
 
-## 2026-10-04 | phase-14 | worker and BullMQ pipeline
+## 2026-10-04 | phase-15 | enrich page fetch
 
-Goal: Queue-backed lead pipeline workers.
+Goal: Polite enrichment of entity domains.
 
 Done:
-- apps/worker/src/queues.ts: queue names (discover, enrich, audit, score, prove, message) and job payloads
-- apps/worker/src/redis.ts: ioredis connection from REDIS_URL
-- apps/worker/src/jobs/discover.ts: routes all nine source adapters; requires env keys where needed
-- apps/worker/src/jobs/audit.ts and score.ts: call runAudit and scoreLead
-- apps/worker/src/index.ts: Workers with retries, progress, graceful SIGINT/SIGTERM shutdown
-- Unit tests for createAdapter routing
+- packages/enrich/src/fetch.ts: User-Agent, robots.txt evaluation, timeout, max body size, private host/IP refusal
+- packages/enrich/src/contacts.ts: mailto, tel, and text email extraction with role local-parts
+- packages/enrich/src/tech.ts: WordPress/Shopify/Wix/etc and GA/GTM/Meta pixel hints
+- packages/enrich/src/enrich.ts: enrichEntity orchestrator
+- apps/worker enrich job and worker registration
+- Unit tests for robots rules, SSRF refusal, mock fetch, and contacts
 
-Achieved: Worker process can run discover, audit, and score jobs when Redis is available.
+Achieved: Discover → Enrich → Audit → Score path is implementable end to end in the worker.
 
-Problems: Candidate persistence to Postgres not yet wired. Enrich/prove/message workers are named but not implemented.
-
-Next: Enrich job (page fetch) or proof report generation.
+Next: Proof report generation or messaging drafts.
