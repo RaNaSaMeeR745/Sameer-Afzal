@@ -1,22 +1,25 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
+## packages/audit (Phase 13)
+
+| Path | Purpose |
+|------|---------|
+| packages/audit/src/html.ts | HTML extractors |
+| packages/audit/src/checks/seo.ts | SEO findings |
+| packages/audit/src/checks/technical.ts | HTTPS, viewport, status, noindex |
+| packages/audit/src/checks/aeo.ts | JSON-LD and FAQ schema |
+| packages/audit/src/run.ts | runAudit orchestrator |
+| packages/audit/src/run.test.ts | Unit tests |
+| packages/audit/src/index.ts | Exports |
+
 ## packages/core
 
-| Path | Purpose | Phase |
-|------|---------|-------|
-| packages/core/src/modes.ts | Lead modes | 2 |
-| packages/core/src/services.ts | Service catalog | 2 |
-| packages/core/src/types.ts | Domain schemas including ScoreBreakdown | 2 |
-| packages/core/src/scoring.ts | scoreLead and weight learning | 12 |
-| packages/core/src/scoring.test.ts | Scoring unit tests | 12 |
-| packages/core/src/index.ts | Package exports | 2-12 |
+modes, services, types, scoring (Phases 2, 12)
 
 ## packages/sources
 
-Nine adapters: Overpass, OSM agency, Companies House, EDGAR, crt.sh, HN Algolia, Adzuna, Meta Ad Library, Brave Search (Phases 5-10).
+Nine adapters (Phases 5-10)
 
-## Other
+## packages/db, apps/web
 
-- packages/db: schema + RLS (Phases 3-4)
-- apps/web: Better Auth + pages (Phase 4)
-- docs/: fixed documentation set
+Schema, RLS, Better Auth (Phases 3-4)
