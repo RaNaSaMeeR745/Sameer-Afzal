@@ -41,10 +41,19 @@
 │   ├── audit/
 │   ├── billing/
 │   ├── core/
+│   │   ├── package.json
+│   │   ├── tsconfig.json
+│   │   └── src/
+│   │       ├── index.ts
+│   │       ├── modes.ts
+│   │       ├── modes.test.ts
+│   │       ├── services.ts
+│   │       ├── services.test.ts
+│   │       ├── types.ts
+│   │       └── types.test.ts
 │   ├── db/
 │   ├── enrich/
 │   └── sources/
-│       (each: package.json, tsconfig.json, src/index.ts)
 └── scripts/
     └── check-banned.ts
 ```
@@ -55,9 +64,9 @@
 |------|---------|--------|-----------------|----------------------|
 | AGENTS.md | Non-negotiable agent rules and phase start checklist | docs | 0 | 0 |
 | README.md | Detailed product description, audience, goals, architecture summary, links to every doc | docs | 0 | 0 |
-| docs/HISTORY.md | Detailed commit log, one entry per commit | docs | 0 | 1 |
-| docs/FILEMAP.md | Inventory of every file in the repository | docs | 0 | 1 |
-| docs/PROJECT_PLAN.md | Full phased development plan with goals, tasks, acceptance criteria, status | docs | 0 | 1 |
+| docs/HISTORY.md | Detailed commit log, one entry per commit | docs | 0 | 2 |
+| docs/FILEMAP.md | Inventory of every file in the repository | docs | 0 | 2 |
+| docs/PROJECT_PLAN.md | Full phased development plan with goals, tasks, acceptance criteria, status | docs | 0 | 2 |
 | docs/ARCHITECTURE.md | System design, stack, data model, queues, multi-tenancy, deployment | docs | 0 | 0 |
 | docs/SECURITY.md | Threat model, controls, compliance stance, incident process | docs | 0 | 0 |
 | docs/DATA_SOURCES.md | Every lead source: terms, limits, coverage, verification date, status | docs | 0 | 0 |
@@ -74,9 +83,15 @@
 | .env.example | Environment variable names only (no secrets) | root | 1 | 1 |
 | scripts/check-banned.ts | CI script that fails on TODO, FIXME, em dash, lorem, dummy keys | scripts | 1 | 1 |
 | .github/workflows/ci.yml | GitHub Actions: install, banned check, typecheck, lint, test, build | ci | 1 | 1 |
-| packages/core/package.json | Core domain package metadata | core | 1 | 1 |
-| packages/core/tsconfig.json | Core package TypeScript config | core | 1 | 1 |
-| packages/core/src/index.ts | Core package entry (package name constant) | core | 1 | 1 |
+| packages/core/package.json | Core domain package metadata and test script | core | 1 | 2 |
+| packages/core/tsconfig.json | Core package TypeScript config (excludes tests from build) | core | 1 | 2 |
+| packages/core/src/index.ts | Core package public exports | core | 1 | 2 |
+| packages/core/src/modes.ts | B2B/B2C mode definitions, Zod enums, helpers | core | 2 | 2 |
+| packages/core/src/modes.test.ts | Unit tests for modes | core | 2 | 2 |
+| packages/core/src/services.ts | Full service catalog with detectable problems and mode mapping | core | 2 | 2 |
+| packages/core/src/services.test.ts | Unit tests for services | core | 2 | 2 |
+| packages/core/src/types.ts | Domain types and Zod schemas (Entity, Lead, Score, etc.) | core | 2 | 2 |
+| packages/core/src/types.test.ts | Unit tests for types and totalScore | core | 2 | 2 |
 | packages/db/package.json | Database package metadata | db | 1 | 1 |
 | packages/db/tsconfig.json | DB package TypeScript config | db | 1 | 1 |
 | packages/db/src/index.ts | DB package entry | db | 1 | 1 |
