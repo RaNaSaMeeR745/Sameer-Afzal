@@ -5,26 +5,36 @@ import { nextCookies } from "better-auth/next-js";
 import { createDb } from "@scoutline/db";
 import * as schema from "@scoutline/db";
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`${name} environment variable is required for auth`);
-  }
-  return value;
+const databaseUrl = process.env.DATABASE_URL ?? "";
+const db = databaseUrl
+  ? createDb(databaseUrl)
+  : (null as unknown as ReturnType<typeof createDb>);
+
+const socialProviders: {
+  google?: { clientId: string; clientSecret: string };
+  github?: { clientId: string; clientSecret: string };
+} = {};
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  socialProviders.google = {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  };
 }
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL environment variable is required for auth");
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+  socialProviders.github = {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  };
 }
-
-const db = createDb(databaseUrl);
 
 /**
  * Better Auth server instance for Scoutline.
- * Email/password with verification intent, Google and GitHub OAuth,
+ * Email/password, optional Google and GitHub OAuth (when env is set),
  * TOTP two-factor via plugin. Sessions use secure cookies (nextCookies).
  * Config verified against better-auth.com docs on 2026-10-04.
+ * DATABASE_URL, BETTER_AUTH_SECRET, and BETTER_AUTH_URL must be set at runtime.
  */
 export const auth = betterAuth({
   appName: "Scoutline",
@@ -44,22 +54,7 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-      enabled: Boolean(
-        process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
-      ),
-    },
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID ?? "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
-      enabled: Boolean(
-        process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET,
-      ),
-    },
-  },
+  socialProviders,
   plugins: [
     twoFactor({
       issuer: "Scoutline",
