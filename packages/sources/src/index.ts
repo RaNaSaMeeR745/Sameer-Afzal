@@ -31,3 +31,16 @@ export {
   type CrtShAdapterOptions,
   type CrtShRow,
 } from "./crtsh.js";
+
+export {
+  HnAlgoliaAdapter,
+  mapHnHit,
+  extractCompanyFromTitle,
+  type HnAlgoliaAdapterOptions,
+} from "./hn-algolia.js";
+
+export {
+  AdzunaAdapter,
+  mapAdzunaJob,
+  type AdzunaAdapterOptions,
+} from "./adzuna.js";
