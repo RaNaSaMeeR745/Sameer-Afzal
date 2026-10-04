@@ -17,24 +17,28 @@ Every source must be verified against current official documentation and terms b
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
 | UK Companies House API | https://developer.company-information.service.gov.uk/ | Free public data API with registered API key. HTTP Basic (key as username). Do not embed keys in client code. | 600 requests per 5-minute window per application. HTTP 429 when exceeded. | UK | 2026-10-04 | implemented |
 | US SEC EDGAR | https://www.sec.gov/edgar and efts.sec.gov | Public filings. Fair access: identify with User-Agent including contact email. No API key. | Max 10 requests per second. No daily quota. Exceeding can yield 403/429 and temporary IP block. | US | 2026-10-04 | implemented |
-| Certificate Transparency (crt.sh) | https://crt.sh | Public logs | Free, rate limits apply | Global | pending Phase 7 | candidate |
+| Certificate Transparency (crt.sh) | https://crt.sh/?q=&output=json | Public CT log search. No API key. JSON via output=json. Service is donation-supported and can return 50x under load. | Operator-reported throttle historically ~60 requests per IP per minute. Back off on 429/502/503/504. | Global | 2026-10-04 | implemented |
 | Product Hunt API | Official docs | Check terms | Free tier verify | Global | pending | candidate |
 | OpenCorporates | Official docs | Limited free access | Limited | Multi-country | pending | candidate |
 
 ### UK Companies House verification notes (2026-10-04)
 
-- Docs: developer.company-information.service.gov.uk developer guidelines and rate limiting.
-- Adapter: `packages/sources/src/companies-house.ts` (`CompaniesHouseAdapter`).
-- Requires `COMPANIES_HOUSE_API_KEY` (env name only in .env.example).
-- Search: `/search/companies?q=` and advanced `/advanced-search/companies?incorporated_from=`.
-- Evidence URL points to find-and-update.company-information.service.gov.uk.
+- Adapter: `packages/sources/src/companies-house.ts`.
+- Requires `COMPANIES_HOUSE_API_KEY`.
 
 ### US SEC EDGAR verification notes (2026-10-04)
 
-- Fair access: User-Agent with app name and contact; max 10 req/s; no key.
-- Adapter: `packages/sources/src/edgar.ts` (`EdgarAdapter`).
-- Endpoint: `https://efts.sec.gov/LATEST/search-index` (full-text search).
-- Dedupes hits by CIK. Evidence URL uses sec.gov browse-edgar by CIK.
+- Adapter: `packages/sources/src/edgar.ts`.
+- Endpoint: `https://efts.sec.gov/LATEST/search-index`.
+
+### Certificate Transparency crt.sh verification notes (2026-10-04)
+
+- Public site: https://crt.sh/ . Query form supports identity search; append `output=json` for machine-readable results.
+- Adapter: `packages/sources/src/crtsh.ts` (`CrtShAdapter`).
+- Maps certificate common names and SAN name_value lines to domain candidates; skips wildcards.
+- Optional `incorporatedSince` filters on certificate `not_before`.
+- Evidence URL: `https://crt.sh/?id={id}` when available.
+- Rate limit: historical operator post (Rob Stradling, crtsh Google Group) documented ~60 r/m per IP; treat as soft fair-use and back off on errors.
 
 ## Hiring signals
 
