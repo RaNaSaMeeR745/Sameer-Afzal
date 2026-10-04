@@ -32,21 +32,22 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 
 ## Phase 7: Certificate Transparency (crt.sh) adapter
 
-**Goal:** Verify crt.sh public CT search and implement domain discovery from new certificates.
+**Status:** done
+
+## Phase 8: Hiring signal adapters (HN Algolia and Adzuna)
+
+**Goal:** Verify and implement hiring-signal sources for hiring_company mode.
 
 **Tasks:**
-- [x] Verify crt.sh access model and rate guidance (~60 req/min historical)
-- [x] CrtShAdapter with output=json, not_before filter, hostname mapping
-- [x] Unit tests (mapCrtShRow, mocked fetch)
-- [x] Update DATA_SOURCES, FILEMAP, HISTORY, PROJECT_PLAN
+- [x] Verify HN Algolia public API
+- [x] Verify Adzuna terms, limits, and commercial licence caution
+- [x] HnAlgoliaAdapter + unit tests
+- [x] AdzunaAdapter + unit tests
+- [x] Update DATA_SOURCES, .env.example, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none
-
-## Phase 8: Hiring signal adapters (HN Algolia and/or Adzuna)
-
-**Status:** not started
+**Blockers:** none (Adzuna commercial scale may need a written licence per their ToS)
 
 ## Phase 9: Meta Ad Library adapter (verify terms first)
 
