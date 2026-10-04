@@ -20,28 +20,33 @@ Achieved: global and tenant tables, RLS SQL, createDb.
 
 ## 2026-10-04 | phase-4 | auth foundation with Better Auth
 
-Achieved: email/password, OAuth, TOTP, sign-in/up pages, session-gated dashboard.
+Achieved: email/password, OAuth, TOTP, sign-in/up pages, dashboard.
 
 ## 2026-10-04 | phase-5 | OpenStreetMap Overpass source adapter
 
-Achieved: OverpassAdapter with verified fair-use handling.
+Achieved: OverpassAdapter.
 
 ## 2026-10-04 | phase-6 | UK Companies House and SEC EDGAR adapters
 
-Achieved: CompaniesHouseAdapter and EdgarAdapter with verified limits.
+Achieved: CompaniesHouseAdapter and EdgarAdapter.
 
 ## 2026-10-04 | phase-7 | Certificate Transparency crt.sh adapter
 
-Goal: Discover domains from public CT logs as a new-site signal.
+Achieved: CrtShAdapter.
+
+## 2026-10-04 | phase-8 | hiring signal adapters (HN Algolia and Adzuna)
+
+Goal: Hiring signals for hiring_company mode.
 
 Done:
-- Verified crt.sh public JSON search (`/?q=&output=json`), no API key. Historical operator rate guidance ~60 requests per IP per minute; service may return 50x under load.
-- packages/sources/src/crtsh.ts: CrtShAdapter, mapCrtShRow (skips wildcards, dedupes hostnames, filters not_before via incorporatedSince)
-- packages/sources/src/crtsh.test.ts: unit tests with mocked fetch
-- DATA_SOURCES.md: crt.sh status implemented with verification notes
+- HN Algolia: public `hn.algolia.com/api/v1/search`, no key. HnAlgoliaAdapter extracts companies from hiring story titles.
+- Adzuna: verified ToS limits (25/min, 250/day, 2500/month) and commercial licence caution after 14-day trial for commercial orgs. AdzunaAdapter requires app id/key.
+- Unit tests for both adapters.
+- ADZUNA_APP_ID and ADZUNA_APP_KEY in .env.example.
+- DATA_SOURCES updated.
 
-Achieved: Four free sources implemented (Overpass, Companies House, EDGAR, crt.sh).
+Achieved: Six free or freemium sources implemented.
 
-Problems: Live crt.sh not called in agent environment.
+Problems: Adzuna commercial production use may need a written licence; flag before scaling.
 
-Next: Phase 8 (hiring signal adapters).
+Next: Phase 9 (Meta Ad Library, verify terms first).
