@@ -24,3 +24,10 @@ export {
 } from "./companies-house.js";
 
 export { EdgarAdapter, type EdgarAdapterOptions } from "./edgar.js";
+
+export {
+  CrtShAdapter,
+  mapCrtShRow,
+  type CrtShAdapterOptions,
+  type CrtShRow,
+} from "./crtsh.js";
