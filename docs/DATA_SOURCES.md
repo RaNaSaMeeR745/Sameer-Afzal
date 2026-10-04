@@ -25,31 +25,27 @@ Every source must be verified against current official documentation and terms b
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Hacker News (Algolia) | https://hn.algolia.com/api | Official public HN search API. No key. Shared index; use modest volume. | Public shared service; back off on 429 | Global remote | 2026-10-04 | implemented |
-| Adzuna API | https://developer.adzuna.com/docs/terms_of_service | Free keys for permitted uses. Commercial/government/academic beyond 14-day trial may need written licence. | 25/min, 250/day, 1000/week, 2500/month default | Multi-country | 2026-10-04 | implemented (licence caution) |
+| Hacker News (Algolia) | https://hn.algolia.com/api | Official public HN search API. No key. | Shared service; back off on 429 | Global remote | 2026-10-04 | implemented |
+| Adzuna API | https://developer.adzuna.com/docs/terms_of_service | Free keys; commercial beyond trial may need licence | 25/min, 250/day, 2500/month | Multi-country | 2026-10-04 | implemented (licence caution) |
 | RemoteOK API | Official | Check | Free | Remote | pending | candidate |
 | We Work Remotely RSS | Public RSS | Fair use | Free | Remote | pending | candidate |
 | Jooble API | Official | Free keys | Free tier | Multi | pending | candidate |
-
-### HN Algolia verification notes (2026-10-04)
-
-- Endpoint: `https://hn.algolia.com/api/v1/search`
-- Adapter: `packages/sources/src/hn-algolia.ts`
-- Filters stories with hiring language; extracts company from title patterns.
-
-### Adzuna verification notes (2026-10-04)
-
-- Terms: developer.adzuna.com Terms of Service.
-- Adapter: `packages/sources/src/adzuna.ts`
-- Requires `ADZUNA_APP_ID` and `ADZUNA_APP_KEY`.
-- Production commercial use beyond trial may require contacting Adzuna for a licence.
 
 ## Advertising signals
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Meta Ad Library | Official API docs | Regional | Free where available | Regional | pending Phase 9 | candidate |
+| Meta Ad Library | https://developers.facebook.com/docs/graph-api/reference/ads_archive/ | Official Graph API ads_archive. Requires Meta app, identity confirmation, access token. Do not scrape the web UI. | Graph rate limits (error 613 when exceeded); typical development quota is modest (~hundreds/hour). Back off on 613/429. | Commercial ads strongest in EU/UK (DSA). Outside those regions API results often limited to political/issue ads. | 2026-10-04 | implemented |
 | Google Ads Transparency Center | No official API | Manual only | N/A | Global | pending | rejected |
+
+### Meta Ad Library verification notes (2026-10-04)
+
+- Endpoint: `GET https://graph.facebook.com/{version}/ads_archive`
+- Required: access_token, ad_reached_countries, search_terms (or search_page_ids)
+- Adapter: `packages/sources/src/meta-ad-library.ts`
+- Maps active advertisers (page_name) to candidates with ad snapshot evidence URL
+- Env: `META_AD_LIBRARY_ACCESS_TOKEN` (name only in .env.example)
+- Identity verification is a human/process step before tokens work; not automatable in CI
 
 ## Agency discovery
 
