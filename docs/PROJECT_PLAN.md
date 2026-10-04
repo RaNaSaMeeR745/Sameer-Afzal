@@ -16,25 +16,24 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 
 ## Phase 3: Database schema and Drizzle setup
 
-**Goal:** packages/db with PostgreSQL 16 schema, RLS policies skeleton, migrations.
-
-**Tasks:**
-- [x] Drizzle schema for global tables (entities, signals, contacts, audits, agency_credits)
-- [x] Drizzle schema for tenant tables (tenants, memberships, searches, tenant_leads, and related)
-- [x] drizzle.config.ts and client helper
-- [x] SQL migration for RLS policies on tenant tables
-- [x] package.json scripts for generate/migrate
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
-
-**Acceptance criteria:** All tables from ARCHITECTURE.md are defined in Drizzle. Every tenant table has tenant_id. RLS SQL enables isolation via app.current_tenant_id. createDb and setTenantContext are exported.
-
 **Status:** done
-
-**Blockers:** none (drizzle-kit generate against a live DATABASE_URL not run in agent environment; schema source is the source of truth until first migrate)
 
 ## Phase 4: Auth foundation (Better Auth)
 
-**Status:** not started
+**Goal:** Email/password + OAuth + TOTP skeleton in apps/web.
+
+**Tasks:**
+- [ ] Auth server config (email/password, Google, GitHub, twoFactor plugin)
+- [ ] Drizzle adapter wiring to packages/db
+- [ ] Auth table schema for Better Auth core + twoFactor
+- [ ] Next.js API route /api/auth/[...all]
+- [ ] Auth client (better-auth/react)
+- [ ] Minimal sign-in and sign-up pages
+- [ ] Update .env.example if needed, FILEMAP, HISTORY, PROJECT_PLAN
+
+**Status:** in progress
+
+**Blockers:** none
 
 ## Phase 5-11: Data source adapters (one or two per phase)
 
