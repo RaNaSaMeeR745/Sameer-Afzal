@@ -23,17 +23,19 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 **Goal:** Email/password + OAuth + TOTP skeleton in apps/web.
 
 **Tasks:**
-- [ ] Auth server config (email/password, Google, GitHub, twoFactor plugin)
-- [ ] Drizzle adapter wiring to packages/db
-- [ ] Auth table schema for Better Auth core + twoFactor
-- [ ] Next.js API route /api/auth/[...all]
-- [ ] Auth client (better-auth/react)
-- [ ] Minimal sign-in and sign-up pages
-- [ ] Update .env.example if needed, FILEMAP, HISTORY, PROJECT_PLAN
+- [x] Auth server config (email/password, Google, GitHub, twoFactor plugin)
+- [x] Drizzle adapter wiring to packages/db
+- [x] Auth table schema for Better Auth core + twoFactor
+- [x] Next.js API route /api/auth/[...all]
+- [x] Auth client (better-auth/react)
+- [x] Minimal sign-in, sign-up, two-factor, and dashboard pages
+- [x] Update package.json, FILEMAP, HISTORY, PROJECT_PLAN
 
-**Status:** in progress
+**Acceptance criteria:** Auth server exports email/password and conditional OAuth. TOTP plugin registered. API route mounted. Sign-in and sign-up work against the handler when DATABASE_URL and secrets are set. Dashboard requires a session.
 
-**Blockers:** none
+**Status:** done
+
+**Blockers:** none (runtime requires DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL; OAuth requires provider credentials; auth tables must be migrated before first sign-up)
 
 ## Phase 5-11: Data source adapters (one or two per phase)
 
