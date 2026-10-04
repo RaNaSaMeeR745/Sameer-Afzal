@@ -247,7 +247,7 @@ Decisions: Repository location, stack, pricing model defaults
 
 Problems: none
 
-Next: Update FILEMAP to full inventory, mark Phase 0 done, write HISTORY.
+Next: Update FILEMAP to full inventory, mark Phase 0 done, complete HISTORY.
 
 ## 2026-09-29 | phase-0 | fbb8a47 | update FILEMAP.md with complete file inventory
 
@@ -305,3 +305,36 @@ Decisions: none
 Problems: none
 
 Next: Begin Phase 1 after reading AGENTS.md, FILEMAP.md, PROJECT_PLAN.md, and last HISTORY entries.
+
+## 2026-10-04 | phase-1 | multiple | monorepo skeleton and tooling
+
+Goal: Establish pnpm workspaces + Turborepo + strict TypeScript baseline, CI, and banned-pattern check.
+
+Done:
+- Root package.json (pnpm 9, turbo, typescript, tsx), pnpm-workspace.yaml, turbo.json
+- Strict tsconfig.base.json (strict, noUncheckedIndexedAccess, verbatimModuleSyntax, NodeNext)
+- .gitignore and .env.example (variable names only)
+- packages/core, db, sources, enrich, audit, ai, billing: each with package.json, tsconfig.json, minimal src/index.ts exporting PACKAGE_NAME
+- apps/web: Next.js 15 package.json, tsconfig, root layout and home page
+- apps/worker: package.json, tsconfig, minimal entry
+- scripts/check-banned.ts: scans tracked text files for TODO, FIXME, lorem ipsum, em dash, coming soon, dummy keys
+- .github/workflows/ci.yml: install, check-banned, typecheck, lint, test, build
+- FILEMAP and PROJECT_PLAN updated; Phase 1 marked done
+
+Achieved: Monorepo structure matches ARCHITECTURE.md. CI workflow is present. Banned-pattern guard is in place. No production stubs; package entries are real constants. Hosting provider choice remains pending (does not block Phase 2).
+
+Files changed (summary):
+- package.json, pnpm-workspace.yaml, turbo.json, tsconfig.base.json, .gitignore, .env.example (added)
+- scripts/check-banned.ts (added)
+- .github/workflows/ci.yml (added)
+- packages/*/package.json, tsconfig.json, src/index.ts (added for 7 packages)
+- apps/web and apps/worker package.json, tsconfig, entry files (added)
+- docs/FILEMAP.md, docs/PROJECT_PLAN.md, docs/HISTORY.md (edited)
+
+Docs updated: FILEMAP.md, PROJECT_PLAN.md, HISTORY.md
+
+Decisions: none new (hosting still pending per DECISIONS.md)
+
+Problems: Full local pnpm install + typecheck not run in this environment (no lockfile yet). CI will validate on next push. Lint and test scripts are temporary no-ops until ESLint/Vitest are added in a later phase.
+
+Next: Phase 2 (core domain types and service catalog in packages/core).
