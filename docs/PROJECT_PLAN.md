@@ -2,30 +2,28 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 13
+## Phase 0 through Phase 14
 
-**Status:** done (docs, monorepo, core, db, auth, sources, scoring, audit)
+**Status:** done (docs through worker queues for discover, audit, score)
 
-## Phase 14: Worker and BullMQ pipeline
+## Phase 15: Enrich job and page fetch
 
-**Goal:** Queue-backed discover, audit, and score workers.
+**Goal:** Polite public-page fetch, contact extraction, tech fingerprint, enrich worker.
 
 **Tasks:**
-- [x] Queue names and job payloads
-- [x] Redis connection helper (REDIS_URL)
-- [x] Discover processor with source adapter routing
-- [x] Audit and score processors
-- [x] Worker entry with graceful shutdown
-- [x] bullmq + ioredis dependencies; adapter routing tests
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] fetchPage with User-Agent, robots.txt, timeout, size cap, private-host SSRF guard
+- [x] extractContacts (mailto, tel, text emails)
+- [x] fingerprintTech (CMS and analytics hints)
+- [x] enrichEntity orchestrator
+- [x] processEnrichJob + register enrich worker
+- [x] Unit tests; update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for code. Runtime requires Redis. DB persistence of candidates still pending a later phase.
+**Blockers:** none
 
 ## Later phases
 
-- Enrich job and page fetch
 - Proof report generation
 - Messaging drafts
 - Billing with Paddle
