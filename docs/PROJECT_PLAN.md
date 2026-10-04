@@ -33,18 +33,20 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 **Goal:** Establish pnpm workspaces + Turborepo + strict TypeScript baseline, CI lint/typecheck skeleton, and banned-pattern check.
 
 **Tasks:**
-- [ ] Root package.json, pnpm-workspace.yaml, turbo.json
-- [ ] packages/core, packages/db, packages/sources, packages/enrich, packages/audit, packages/ai, packages/billing placeholders with package.json only (no stubs)
-- [ ] apps/web and apps/worker package.json
-- [ ] Strict tsconfig base and per-package configs
-- [ ] scripts/check-banned.ts (grep for TODO, FIXME, em dash, lorem, etc.)
-- [ ] GitHub Actions workflow for lint, typecheck, banned check
-- [ ] .env.example with variable names only
-- [ ] Update all docs
+- [x] Root package.json, pnpm-workspace.yaml, turbo.json
+- [x] packages/core, packages/db, packages/sources, packages/enrich, packages/audit, packages/ai, packages/billing placeholders with package.json only (no stubs)
+- [x] apps/web and apps/worker package.json
+- [x] Strict tsconfig base and per-package configs
+- [x] scripts/check-banned.ts (grep for TODO, FIXME, em dash, lorem, etc.)
+- [x] GitHub Actions workflow for lint, typecheck, banned check
+- [x] .env.example with variable names only
+- [x] Update all docs
 
-**Status:** in progress
+**Acceptance criteria:** Monorepo installs with pnpm, check-banned runs, typecheck paths exist, CI workflow present, FILEMAP and HISTORY updated. Hosting provider choice remains pending (recorded in DECISIONS).
 
-**Blockers:** none
+**Status:** done
+
+**Blockers:** none (hosting decision deferred to a short follow-up once pricing pages are re-read; does not block Phase 2)
 
 ## Phase 2: Core domain types and service catalog
 
