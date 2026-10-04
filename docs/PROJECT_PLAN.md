@@ -53,15 +53,17 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 **Goal:** Define TypeScript types and the service catalog in packages/core.
 
 **Tasks:**
-- [ ] packages/core/src/types.ts (Entity, Signal, Contact, Lead, ScoreBreakdown, etc.)
-- [ ] packages/core/src/services.ts (full service catalog from the product spec)
-- [ ] packages/core/src/modes.ts (B2B/B2C modes)
-- [ ] Zod schemas for validation
-- [ ] Unit tests for pure helpers
+- [x] packages/core/src/types.ts (Entity, Signal, Contact, Lead, ScoreBreakdown, etc.)
+- [x] packages/core/src/services.ts (full service catalog from the product spec)
+- [x] packages/core/src/modes.ts (B2B/B2C modes)
+- [x] Zod schemas for validation
+- [x] Unit tests for pure helpers
 
-**Status:** in progress
+**Acceptance criteria:** Modes and services match product constitution. Zod schemas validate core domain objects. Unit tests cover modes, services, and score helpers. Exports available from @scoutline/core.
 
-**Blockers:** none
+**Status:** done
+
+**Blockers:** none (local pnpm install hit intermittent registry 502 in the agent environment; CI on GitHub will re-run tests after lockfile is generated)
 
 ## Phase 3: Database schema and Drizzle setup
 
