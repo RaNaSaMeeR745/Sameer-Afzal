@@ -4,22 +4,19 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 | phase-1 through phase-14 | monorepo through BullMQ workers
+## 2026-10-04 | phase-1 through phase-15 | monorepo through enrich
 
-Achieved: Sources, scoring, audit, discover/audit/score workers.
+Achieved: Sources, scoring, audit, enrich, BullMQ workers.
 
-## 2026-10-04 | phase-15 | enrich page fetch
+## 2026-10-04 | phase-16 | proof report generation
 
-Goal: Polite enrichment of entity domains.
+Goal: Ready-made proof asset for agency outreach.
 
 Done:
-- packages/enrich/src/fetch.ts: User-Agent, robots.txt evaluation, timeout, max body size, private host/IP refusal
-- packages/enrich/src/contacts.ts: mailto, tel, and text email extraction with role local-parts
-- packages/enrich/src/tech.ts: WordPress/Shopify/Wix/etc and GA/GTM/Meta pixel hints
-- packages/enrich/src/enrich.ts: enrichEntity orchestrator
-- apps/worker enrich job and worker registration
-- Unit tests for robots rules, SSRF refusal, mock fetch, and contacts
+- packages/core/src/proof.ts: buildProofReport produces self-contained HTML with score breakdown, sorted findings, evidence links, and HTML escaping
+- Unit test verifies entity name escaping and finding render
+- apps/worker prove job and worker registration
 
-Achieved: Discover → Enrich → Audit → Score path is implementable end to end in the worker.
+Achieved: Discover → Enrich → Audit → Score → Prove path exists in code.
 
-Next: Proof report generation or messaging drafts.
+Next: Messaging drafts.
