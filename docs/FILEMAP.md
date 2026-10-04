@@ -1,19 +1,16 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## packages/core
+## packages/ai (Phase 17)
 
-| Path | Phase |
-|------|-------|
-| modes, services, types | 2 |
-| scoring.ts | 12 |
-| proof.ts | 16 |
+| Path | Purpose |
+|------|---------|
+| packages/ai/src/messaging.ts | draftOutreach |
+| packages/ai/src/messaging.test.ts | Unit tests |
 
-## packages/enrich (15) | packages/audit (13) | packages/sources (5-10)
+## apps/worker jobs
 
-## apps/worker
+discover, enrich, audit, score, prove, message (14-17)
 
-jobs: discover, enrich, audit, score, prove (14-16)
+## packages/core, sources, audit, enrich, db; apps/web
 
-## apps/web, packages/db
-
-Auth and schema (3-4)
+Prior phases
