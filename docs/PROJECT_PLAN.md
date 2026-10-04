@@ -2,28 +2,30 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 12
+## Phase 0 through Phase 13
 
-**Status:** done (docs, monorepo, core, db, auth, sources, scoring)
+**Status:** done (docs, monorepo, core, db, auth, sources, scoring, audit)
 
-## Phase 13: Audit engine integration
+## Phase 14: Worker and BullMQ pipeline
 
-**Goal:** Deterministic page audits producing AuditFindings with evidence and serviceKeys.
+**Goal:** Queue-backed discover, audit, and score workers.
 
 **Tasks:**
-- [x] HTML helpers (title, meta, H1, canonical, viewport, JSON-LD, FAQ schema)
-- [x] Technical, SEO, and AEO check suites
-- [x] runAudit orchestrator with optional serviceKey filter
-- [x] Unit tests on bare and complete pages
-- [x] Export from @scoutline/audit; update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] Queue names and job payloads
+- [x] Redis connection helper (REDIS_URL)
+- [x] Discover processor with source adapter routing
+- [x] Audit and score processors
+- [x] Worker entry with graceful shutdown
+- [x] bullmq + ioredis dependencies; adapter routing tests
+- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none (network fetch lives in enrich/worker later; audit is pure on snapshots)
+**Blockers:** none for code. Runtime requires Redis. DB persistence of candidates still pending a later phase.
 
 ## Later phases
 
-- Worker and BullMQ pipeline
+- Enrich job and page fetch
 - Proof report generation
 - Messaging drafts
 - Billing with Paddle
