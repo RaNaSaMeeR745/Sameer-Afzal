@@ -6,54 +6,57 @@ Every source must be verified against current official documentation and terms b
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Read-only public instances. User-Agent required. | Fair-use guidelines apply | Global | 2026-10-04 | implemented |
-| Google Places API | Official Google docs | BYOK | Paid | Global | pending | candidate (BYOK) |
-| Foursquare Places API | Official docs | BYOK | Free tier verify | Global | pending | candidate (BYOK) |
-| Yelp Fusion | Official docs | Paid | Paid | Limited | pending | candidate (BYOK) |
+| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Read-only. User-Agent required. | Fair-use guidelines | Global | 2026-10-04 | implemented |
+| Google Places API | Official | BYOK | Paid | Global | pending | candidate (BYOK) |
+| Foursquare Places API | Official | BYOK | Free tier verify | Global | pending | candidate (BYOK) |
+| Yelp Fusion | Official | Paid | Paid | Limited | pending | candidate (BYOK) |
 
 ## New business and funding signals
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| UK Companies House API | https://developer.company-information.service.gov.uk/ | Free API key, Basic auth | 600/5min | UK | 2026-10-04 | implemented |
-| US SEC EDGAR | efts.sec.gov | User-Agent + contact, no key | 10 req/s | US | 2026-10-04 | implemented |
-| Certificate Transparency (crt.sh) | https://crt.sh/?output=json | Public CT search, no key | ~60 req/min historical | Global | 2026-10-04 | implemented |
-| Product Hunt API | Official docs | Check terms | Free tier verify | Global | pending | candidate |
-| OpenCorporates | Official docs | Limited free | Limited | Multi | pending | candidate |
+| UK Companies House API | developer.company-information.service.gov.uk | Free API key | 600/5min | UK | 2026-10-04 | implemented |
+| US SEC EDGAR | efts.sec.gov | User-Agent, no key | 10 req/s | US | 2026-10-04 | implemented |
+| Certificate Transparency (crt.sh) | crt.sh | Public, no key | ~60/min historical | Global | 2026-10-04 | implemented |
+| Product Hunt API | Official | Check terms | Verify | Global | pending | candidate |
+| OpenCorporates | Official | Limited free | Limited | Multi | pending | candidate |
 
 ## Hiring signals
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Hacker News (Algolia) | https://hn.algolia.com/api | Official public HN search API. No key. | Shared service; back off on 429 | Global remote | 2026-10-04 | implemented |
-| Adzuna API | https://developer.adzuna.com/docs/terms_of_service | Free keys; commercial beyond trial may need licence | 25/min, 250/day, 2500/month | Multi-country | 2026-10-04 | implemented (licence caution) |
-| RemoteOK API | Official | Check | Free | Remote | pending | candidate |
-| We Work Remotely RSS | Public RSS | Fair use | Free | Remote | pending | candidate |
-| Jooble API | Official | Free keys | Free tier | Multi | pending | candidate |
+| Hacker News (Algolia) | hn.algolia.com/api | Public, no key | Shared; back off on 429 | Global | 2026-10-04 | implemented |
+| Adzuna API | developer.adzuna.com | Free keys; commercial licence caution | 25/min, 250/day, 2500/month | Multi | 2026-10-04 | implemented (licence caution) |
+| RemoteOK / WWR / Jooble | Official | Check | Varies | Remote/multi | pending | candidate |
 
 ## Advertising signals
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Meta Ad Library | https://developers.facebook.com/docs/graph-api/reference/ads_archive/ | Official Graph API ads_archive. Requires Meta app, identity confirmation, access token. Do not scrape the web UI. | Graph rate limits (error 613 when exceeded); typical development quota is modest (~hundreds/hour). Back off on 613/429. | Commercial ads strongest in EU/UK (DSA). Outside those regions API results often limited to political/issue ads. | 2026-10-04 | implemented |
-| Google Ads Transparency Center | No official API | Manual only | N/A | Global | pending | rejected |
-
-### Meta Ad Library verification notes (2026-10-04)
-
-- Endpoint: `GET https://graph.facebook.com/{version}/ads_archive`
-- Required: access_token, ad_reached_countries, search_terms (or search_page_ids)
-- Adapter: `packages/sources/src/meta-ad-library.ts`
-- Maps active advertisers (page_name) to candidates with ad snapshot evidence URL
-- Env: `META_AD_LIBRARY_ACCESS_TOKEN` (name only in .env.example)
-- Identity verification is a human/process step before tokens work; not automatable in CI
+| Meta Ad Library | graph.facebook.com ads_archive | Token + identity; no UI scraping | Graph 613 when limited | EU/UK commercial strongest | 2026-10-04 | implemented |
+| Google Ads Transparency Center | No official API | Manual only | N/A | Global | 2026-10-04 | rejected |
 
 ## Agency discovery
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| Brave Search / Serper / SerpAPI | Official | BYOK | Varies | Global | pending Phase 10 | candidate (BYOK) |
-| OSM marketing categories | Overpass | Same as OSM | Free | Global | pending | candidate |
-| Clutch / Sortlist / DesignRush | Site terms | Automated access often forbidden | N/A | Global | pending | candidate (manual only) |
+| OSM office tags (advertising_agency, etc.) | wiki.openstreetmap.org Tag:office=advertising_agency | Same Overpass fair-use as other OSM queries | Fair-use | Global | 2026-10-04 | implemented |
+| Brave Search API | brave.com/search/api | BYOK. Metered; monthly credit typical. Default terms restrict bulk storage of results unless plan grants storage rights. | Plan QPS + monthly credits (~$5 credit / ~1000 Search queries common) | Global | 2026-10-04 | implemented (BYOK) |
+| Serper / SerpAPI | Official | BYOK alternatives | Varies | Global | pending | candidate (BYOK) |
+| Clutch / Sortlist / DesignRush | Site terms | Automated access usually forbidden | N/A | Global | 2026-10-04 | rejected (terms forbid automated access) |
+
+### OSM agency verification notes (2026-10-04)
+
+- Adapter: `packages/sources/src/osm-agency.ts`
+- Tags: office=advertising_agency, graphic_design, marketing, consulting
+
+### Brave Search verification notes (2026-10-04)
+
+- Endpoint: `https://api.search.brave.com/res/v1/web/search`
+- Header: `X-Subscription-Token`
+- Adapter: `packages/sources/src/brave-search.ts`
+- Env: `BRAVE_SEARCH_API_KEY`
+- Do not bulk-archive SERP JSON without a storage-rights plan
 
 ## Contact discovery and verification
 
@@ -63,5 +66,6 @@ Public contact pages on the entity's own site only. Optional BYOK enrichment.
 
 - LinkedIn scraping
 - Instagram or Facebook page/group scraping
+- Clutch / Sortlist / DesignRush automated scraping
 - Any source behind a login
 - Any source whose terms forbid automated access
