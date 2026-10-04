@@ -36,17 +36,21 @@ Achieved: CrtShAdapter.
 
 ## 2026-10-04 | phase-8 | hiring signal adapters (HN Algolia and Adzuna)
 
-Goal: Hiring signals for hiring_company mode.
+Achieved: HnAlgoliaAdapter and AdzunaAdapter.
+
+## 2026-10-04 | phase-9 | Meta Ad Library adapter
+
+Goal: Official advertising-signal source without scraping.
 
 Done:
-- HN Algolia: public `hn.algolia.com/api/v1/search`, no key. HnAlgoliaAdapter extracts companies from hiring story titles.
-- Adzuna: verified ToS limits (25/min, 250/day, 2500/month) and commercial licence caution after 14-day trial for commercial orgs. AdzunaAdapter requires app id/key.
-- Unit tests for both adapters.
-- ADZUNA_APP_ID and ADZUNA_APP_KEY in .env.example.
-- DATA_SOURCES updated.
+- Verified Graph API ads_archive (developers.facebook.com, 2026-10-04): requires access token and identity confirmation; ad_reached_countries and search_terms required; commercial coverage strongest in EU/UK; rate limit Graph error 613.
+- packages/sources/src/meta-ad-library.ts: MetaAdLibraryAdapter maps page_name advertisers to candidates with snapshot evidence URLs.
+- Unit tests including 613 handling and page dedupe.
+- META_AD_LIBRARY_ACCESS_TOKEN in .env.example.
+- DATA_SOURCES.md updated; scraping of Ad Library UI explicitly rejected in notes.
 
-Achieved: Six free or freemium sources implemented.
+Achieved: Seven source adapters implemented.
 
-Problems: Adzuna commercial production use may need a written licence; flag before scaling.
+Problems: Live Meta calls need a human-verified token. Non-EU commercial coverage via API is limited.
 
-Next: Phase 9 (Meta Ad Library, verify terms first).
+Next: Phase 10-11 remaining sources, or Phase 12 scoring engine.
