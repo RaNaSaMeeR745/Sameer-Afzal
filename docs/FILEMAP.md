@@ -1,18 +1,19 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## packages/billing (Phase 18)
+## apps/web dashboard (Phase 19)
 
 | Path | Purpose |
 |------|---------|
-| packages/billing/src/plans.ts | Plan catalog |
-| packages/billing/src/credits.ts | Idempotent ledger |
-| packages/billing/src/paddle.ts | Webhook signature verify |
-| packages/billing/src/*.test.ts | Unit tests |
+| apps/web/src/app/dashboard/layout.tsx | Auth shell + nav |
+| apps/web/src/app/dashboard/page.tsx | Overview |
+| apps/web/src/app/dashboard/leads/page.tsx | Leads table |
+| apps/web/src/app/dashboard/searches/page.tsx | Modes and services |
+| apps/web/src/app/dashboard/billing/page.tsx | Plan catalog |
 
-## Pipeline packages
+## packages
 
-core, sources, audit, enrich, ai, worker jobs (discover through message)
+billing, ai, audit, enrich, sources, core, db
 
-## apps/web, packages/db
+## apps/worker
 
-Auth and schema
+jobs: discover, enrich, audit, score, prove, message
