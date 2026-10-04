@@ -1,19 +1,19 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## packages/enrich (Phase 15)
+## packages/core
 
-| Path | Purpose |
-|------|---------|
-| packages/enrich/src/fetch.ts | Polite fetch + robots |
-| packages/enrich/src/contacts.ts | Public contact extraction |
-| packages/enrich/src/tech.ts | Tech fingerprint |
-| packages/enrich/src/enrich.ts | enrichEntity |
-| packages/enrich/src/*.test.ts | Unit tests |
+| Path | Phase |
+|------|-------|
+| modes, services, types | 2 |
+| scoring.ts | 12 |
+| proof.ts | 16 |
+
+## packages/enrich (15) | packages/audit (13) | packages/sources (5-10)
 
 ## apps/worker
 
-queues, redis, jobs/discover, enrich, audit, score, index (Phases 14-15)
+jobs: discover, enrich, audit, score, prove (14-16)
 
-## packages/core, sources, audit, db; apps/web
+## apps/web, packages/db
 
-Prior phases 0-13
+Auth and schema (3-4)
