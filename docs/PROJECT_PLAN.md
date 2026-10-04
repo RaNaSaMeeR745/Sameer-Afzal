@@ -2,58 +2,25 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0: Documentation bootstrap
+## Phase 0 through Phase 9
 
-**Status:** done
+**Status:** done (docs, monorepo, core types, db, auth, Overpass, Companies House, EDGAR, crt.sh, HN, Adzuna, Meta Ad Library)
 
-## Phase 1: Monorepo skeleton and tooling
+## Phase 10-11: Remaining verified sources (BYOK search, OSM agency)
 
-**Status:** done
-
-## Phase 2: Core domain types and service catalog
-
-**Status:** done
-
-## Phase 3: Database schema and Drizzle setup
-
-**Status:** done
-
-## Phase 4: Auth foundation (Better Auth)
-
-**Status:** done
-
-## Phase 5: OpenStreetMap Overpass source adapter
-
-**Status:** done
-
-## Phase 6: UK Companies House and SEC EDGAR adapters
-
-**Status:** done
-
-## Phase 7: Certificate Transparency (crt.sh) adapter
-
-**Status:** done
-
-## Phase 8: Hiring signal adapters (HN Algolia and Adzuna)
-
-**Status:** done
-
-## Phase 9: Meta Ad Library adapter
-
-**Goal:** Verify Meta Ad Library API terms and implement advertising-signal discovery.
+**Goal:** Agency discovery without scraping forbidden directories.
 
 **Tasks:**
-- [x] Verify ads_archive docs, access (token + identity), regional coverage, rate limits
-- [x] MetaAdLibraryAdapter + unit tests
+- [x] Verify OSM office=advertising_agency and related tags
+- [x] OsmAgencyAdapter + unit tests
+- [x] Verify Brave Search API terms, pricing, storage limits
+- [x] BraveSearchAdapter (BYOK) + unit tests
+- [x] Reject Clutch/Sortlist/DesignRush automated access in DATA_SOURCES
 - [x] Update DATA_SOURCES, .env.example, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for code. Runtime requires a verified Meta developer identity and access token. Commercial ad API coverage is strongest in EU/UK.
-
-## Phase 10-11: Remaining verified sources (BYOK search, OSM agency categories)
-
-**Status:** not started
+**Blockers:** none (Brave requires tenant or platform API key at runtime)
 
 ## Phase 12: Scoring engine
 
