@@ -2,27 +2,27 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 15
+## Phase 0 through Phase 16
 
-**Status:** done (docs through enrich page fetch)
+**Status:** done (docs through proof reports)
 
-## Phase 16: Proof report generation
+## Phase 17: Messaging drafts
 
-**Goal:** Self-contained HTML proof asset from findings and score.
+**Goal:** Personalized outreach + 3-step follow-up grounded in audit findings.
 
 **Tasks:**
-- [x] buildProofReport with escaped HTML, score grid, sorted findings
-- [x] Unit tests (XSS escape)
-- [x] ProveJobData + processProveJob + prove worker
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] draftOutreach for email, linkedin, whatsapp
+- [x] Sequence steps with delay days
+- [x] groundedFindingCodes for evidence traceability
+- [x] processMessageJob + message worker
+- [x] Unit tests; update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none (S3 upload of HTML/PDF can follow when object storage is wired)
+**Blockers:** none (LLM rewrite can layer on later; templates are production-usable without API keys)
 
 ## Later phases
 
-- Messaging drafts
 - Billing with Paddle
 - Dashboard UI
 - Landing pages and SEO content
