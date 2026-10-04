@@ -1,34 +1,22 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## Repository Tree (high level)
+## packages/sources (Phase 5-8)
 
-```
-.
-├── apps/web, apps/worker
-├── packages/
-│   ├── core/, db/
-│   ├── sources/
-│   │   └── src/
-│   │       ├── types.ts
-│   │       ├── overpass.ts (+ test)
-│   │       ├── companies-house.ts (+ test)
-│   │       ├── edgar.ts (+ test)
-│   │       ├── crtsh.ts (+ test)
-│   │       └── index.ts
-│   ├── enrich, audit, ai, billing
-├── docs/, scripts/
-```
+| Path | Purpose | Created (phase) |
+|------|---------|-----------------|
+| packages/sources/src/types.ts | SourceAdapter, DiscoverInput, SourceCandidate | 5 |
+| packages/sources/src/overpass.ts | OSM Overpass | 5 |
+| packages/sources/src/companies-house.ts | UK Companies House | 6 |
+| packages/sources/src/edgar.ts | SEC EDGAR | 6 |
+| packages/sources/src/crtsh.ts | Certificate Transparency | 7 |
+| packages/sources/src/hn-algolia.ts | Hacker News Algolia hiring | 8 |
+| packages/sources/src/adzuna.ts | Adzuna Jobs API | 8 |
+| packages/sources/src/*.test.ts | Unit tests per adapter | 5-8 |
+| packages/sources/src/index.ts | Package exports | 1-8 |
 
-## Phase 7 file table
+## Other modules
 
-| Path | Purpose | Module | Created (phase) | Last changed (phase) |
-|------|---------|--------|-----------------|----------------------|
-| packages/sources/src/crtsh.ts | Certificate Transparency crt.sh adapter | sources | 7 | 7 |
-| packages/sources/src/crtsh.test.ts | Unit tests | sources | 7 | 7 |
-| packages/sources/src/index.ts | Export CrtShAdapter | sources | 1 | 7 |
-| docs/DATA_SOURCES.md | crt.sh implemented | docs | 0 | 7 |
-| docs/HISTORY.md | Commit log | docs | 0 | 7 |
-| docs/FILEMAP.md | File inventory | docs | 0 | 7 |
-| docs/PROJECT_PLAN.md | Phased plan | docs | 0 | 7 |
-
-Earlier phases: registry adapters, Overpass, auth, db, core, monorepo, docs.
+- packages/core: modes, services, domain types (Phase 2)
+- packages/db: global, tenant, auth schemas, RLS (Phases 3-4)
+- apps/web: Better Auth, sign-in/up, dashboard (Phase 4)
+- docs/: fixed documentation set (Phase 0+)
