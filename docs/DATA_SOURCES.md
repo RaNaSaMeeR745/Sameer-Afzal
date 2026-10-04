@@ -6,10 +6,20 @@ Every source must be verified against current official documentation and terms b
 
 | Source | URL / docs | Terms summary | Free tier / rate limit | Coverage | Verification date | Status |
 |--------|------------|---------------|------------------------|----------|-------------------|--------|
-| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Usage policy requires caching, polite use, no heavy load | Free, community limits | Global | pending Phase 5 | candidate |
+| OpenStreetMap Overpass API | https://wiki.openstreetmap.org/wiki/Overpass_API | Read-only public instances. Require identifying User-Agent. Cache and rate-limit. On HTTP 429 or 406 pause 30s. Commercial regular use should prefer self-hosted or paid Overpass. ODbL attribution required for derived products. | Main instance (overpass-api.de): guideline under ~10,000 queries and ~1 GB/day for one-off use; for regular app use divide by ~100 (~100 queries and ~10 MB/day). No parallel multi-script hammering. | Global | 2026-10-04 | implemented |
 | Google Places API | Official Google docs | Strict terms, no resale outside allowed use | Paid, BYOK only | Global | pending | candidate (BYOK) |
 | Foursquare Places API | Official docs | Check current terms | Free tier exists, verify | Global | pending | candidate (BYOK) |
 | Yelp Fusion | Official docs | Paid, no free tier currently | Paid | Limited | pending | candidate (BYOK) |
+
+### OpenStreetMap Overpass verification notes (2026-10-04)
+
+- Endpoint used: `https://overpass-api.de/api/interpreter` (configurable).
+- Adapter: `packages/sources/src/overpass.ts` (`OverpassAdapter`).
+- Sends `User-Agent: Scoutline/0.0.1 (...)` on every request.
+- Maps named amenity/shop nodes and ways to `SourceCandidate` with OSM registry id and evidence URL.
+- Throws on 429/406 with guidance to pause 30 seconds.
+- Production volume must stay within fair-use; heavy commercial workloads should move to self-hosted or paid Overpass (Geofabrik, Mapsource, Overspan, etc.).
+- OSM editing API (api.openstreetmap.org) is not used: it is for map editing only, not bulk read.
 
 ## New business and funding signals
 
@@ -56,5 +66,3 @@ Public contact pages, mailto links, structured data, team pages on the entity's 
 - Instagram or Facebook page/group scraping
 - Any source behind a login
 - Any source whose terms forbid automated access
-
-Verification of every candidate will be performed in Phases 5-11 before any adapter code is written.
