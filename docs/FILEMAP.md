@@ -1,25 +1,21 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## packages/audit (Phase 13)
+## apps/worker (Phase 14)
 
 | Path | Purpose |
 |------|---------|
-| packages/audit/src/html.ts | HTML extractors |
-| packages/audit/src/checks/seo.ts | SEO findings |
-| packages/audit/src/checks/technical.ts | HTTPS, viewport, status, noindex |
-| packages/audit/src/checks/aeo.ts | JSON-LD and FAQ schema |
-| packages/audit/src/run.ts | runAudit orchestrator |
-| packages/audit/src/run.test.ts | Unit tests |
-| packages/audit/src/index.ts | Exports |
+| apps/worker/src/queues.ts | Queue names and job payloads |
+| apps/worker/src/redis.ts | Redis connection |
+| apps/worker/src/jobs/discover.ts | Discover processor + adapter factory |
+| apps/worker/src/jobs/audit.ts | Audit processor |
+| apps/worker/src/jobs/score.ts | Score processor |
+| apps/worker/src/jobs/discover.test.ts | Adapter routing tests |
+| apps/worker/src/index.ts | Worker entrypoint |
 
-## packages/core
+## packages
 
-modes, services, types, scoring (Phases 2, 12)
-
-## packages/sources
-
-Nine adapters (Phases 5-10)
-
-## packages/db, apps/web
-
-Schema, RLS, Better Auth (Phases 3-4)
+- core: modes, services, types, scoring
+- sources: nine adapters
+- audit: runAudit checks
+- db: schema + RLS
+- apps/web: Better Auth
