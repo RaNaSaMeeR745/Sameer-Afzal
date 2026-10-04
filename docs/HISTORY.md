@@ -31,15 +31,31 @@ Next: Phase 2.
 Goal: Define TypeScript types and the service catalog in packages/core.
 
 Done:
-- packages/core/src/modes.ts: five modes (local_business, ecommerce_brand, b2b_company, hiring_company, agency) with Zod enums and helpers
-- packages/core/src/services.ts: full service catalog (33 services) with applicable modes and detectable problems
-- packages/core/src/types.ts: Entity, Signal, Contact, AuditFinding, ScoreBreakdown, TenantLead, SearchConfig, AgencyCredit, Outcome plus Zod schemas and totalScore()
-- Unit tests: modes.test.ts, services.test.ts, types.test.ts (node:test via tsx)
-- index.ts re-exports all public symbols
-- FILEMAP and PROJECT_PLAN updated; Phase 2 marked done
+- packages/core/src/modes.ts: five modes with Zod enums and helpers
+- packages/core/src/services.ts: full service catalog (33 services)
+- packages/core/src/types.ts: Entity, Signal, Contact, ScoreBreakdown, TenantLead, and related Zod schemas
+- Unit tests via node:test and tsx
 
-Achieved: @scoutline/core exports validated domain types, modes, and services matching the product constitution.
+Achieved: @scoutline/core exports validated domain types matching the product constitution.
 
-Problems: Local pnpm install hit intermittent npm registry 502 in the agent environment; tests could not be executed there. CI will run after lockfile exists.
+Problems: Local pnpm install hit intermittent registry 502; tests not executed in agent environment.
 
-Next: Phase 3 (database schema and Drizzle setup).
+Next: Phase 3.
+
+## 2026-10-04 | phase-3 | multiple | database schema and Drizzle setup
+
+Goal: packages/db with PostgreSQL 16 schema, RLS policies skeleton, migrations.
+
+Done:
+- packages/db/src/schema/global.ts: entities, entity_signals, entity_contacts, entity_audits, agency_credits
+- packages/db/src/schema/tenant.ts: tenants, memberships, invitations, offer_profiles, searches, tenant_leads, proof_assets, messages, outcomes, claims, suppressions, credits_ledger, api_keys, webhooks, integrations, audit_log, subscriptions, billing_events
+- packages/db/src/client.ts: createDb(connectionString), setTenantContext for RLS
+- packages/db/drizzle.config.ts
+- packages/db/drizzle/0001_rls_policies.sql: ENABLE ROW LEVEL SECURITY and isolation policies on every tenant table using app.current_tenant_id
+- package.json: postgres dependency, db:generate, db:migrate, db:studio scripts
+
+Achieved: Full data model from ARCHITECTURE.md is expressed in Drizzle. Tenant isolation is defined in SQL. Global business tables remain shared by design.
+
+Problems: drizzle-kit generate was not run against a live DATABASE_URL in this environment. First migrate requires a real Postgres instance.
+
+Next: Phase 4 (Auth foundation with Better Auth).
