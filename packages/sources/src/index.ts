@@ -44,3 +44,9 @@ export {
   mapAdzunaJob,
   type AdzunaAdapterOptions,
 } from "./adzuna.js";
+
+export {
+  MetaAdLibraryAdapter,
+  mapMetaAd,
+  type MetaAdLibraryAdapterOptions,
+} from "./meta-ad-library.js";
