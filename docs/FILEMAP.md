@@ -4,35 +4,31 @@
 
 ```
 .
-├── apps/web (auth, sign-in/up, dashboard), apps/worker
+├── apps/web, apps/worker
 ├── packages/
 │   ├── core/, db/
 │   ├── sources/
 │   │   └── src/
 │   │       ├── types.ts
-│   │       ├── overpass.ts, overpass.test.ts
-│   │       ├── companies-house.ts, companies-house.test.ts
-│   │       ├── edgar.ts, edgar.test.ts
+│   │       ├── overpass.ts (+ test)
+│   │       ├── companies-house.ts (+ test)
+│   │       ├── edgar.ts (+ test)
+│   │       ├── crtsh.ts (+ test)
 │   │       └── index.ts
 │   ├── enrich, audit, ai, billing
 ├── docs/, scripts/
 ```
 
-## Phase 6 file table
+## Phase 7 file table
 
 | Path | Purpose | Module | Created (phase) | Last changed (phase) |
 |------|---------|--------|-----------------|----------------------|
-| packages/sources/src/companies-house.ts | UK Companies House adapter | sources | 6 | 6 |
-| packages/sources/src/companies-house.test.ts | Unit tests | sources | 6 | 6 |
-| packages/sources/src/edgar.ts | SEC EDGAR full-text search adapter | sources | 6 | 6 |
-| packages/sources/src/edgar.test.ts | Unit tests | sources | 6 | 6 |
-| packages/sources/src/types.ts | DiscoverInput supports registry search | sources | 5 | 6 |
-| packages/sources/src/overpass.ts | bbox required check after types change | sources | 5 | 6 |
-| packages/sources/src/index.ts | Export CH and EDGAR adapters | sources | 1 | 6 |
-| .env.example | COMPANIES_HOUSE_API_KEY name | root | 1 | 6 |
-| docs/DATA_SOURCES.md | CH and EDGAR implemented | docs | 0 | 6 |
-| docs/HISTORY.md | Commit log | docs | 0 | 6 |
-| docs/FILEMAP.md | File inventory | docs | 0 | 6 |
-| docs/PROJECT_PLAN.md | Phased plan | docs | 0 | 6 |
+| packages/sources/src/crtsh.ts | Certificate Transparency crt.sh adapter | sources | 7 | 7 |
+| packages/sources/src/crtsh.test.ts | Unit tests | sources | 7 | 7 |
+| packages/sources/src/index.ts | Export CrtShAdapter | sources | 1 | 7 |
+| docs/DATA_SOURCES.md | crt.sh implemented | docs | 0 | 7 |
+| docs/HISTORY.md | Commit log | docs | 0 | 7 |
+| docs/FILEMAP.md | File inventory | docs | 0 | 7 |
+| docs/PROJECT_PLAN.md | Phased plan | docs | 0 | 7 |
 
-Earlier phases: Overpass, auth, db schema, core types, monorepo, documentation set.
+Earlier phases: registry adapters, Overpass, auth, db, core, monorepo, docs.
