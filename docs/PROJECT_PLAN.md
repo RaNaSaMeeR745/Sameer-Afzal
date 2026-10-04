@@ -42,7 +42,9 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 - [ ] .env.example with variable names only
 - [ ] Update all docs
 
-**Status:** not started
+**Status:** in progress
+
+**Blockers:** none
 
 ## Phase 2: Core domain types and service catalog
 
