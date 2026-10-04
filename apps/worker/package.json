@@ -9,7 +9,7 @@
     "start": "node dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "echo \"lint not configured yet\"",
-    "test": "echo \"no tests yet\""
+    "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "@scoutline/core": "workspace:*",
@@ -18,7 +18,9 @@
     "@scoutline/enrich": "workspace:*",
     "@scoutline/audit": "workspace:*",
     "@scoutline/ai": "workspace:*",
-    "@scoutline/billing": "workspace:*"
+    "@scoutline/billing": "workspace:*",
+    "bullmq": "^5.34.5",
+    "ioredis": "^5.4.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
