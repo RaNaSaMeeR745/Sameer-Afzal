@@ -26,10 +26,21 @@ export const SourceCandidateSchema = z.object({
 });
 export type SourceCandidate = z.infer<typeof SourceCandidateSchema>;
 
+/**
+ * Discovery input shared by geographic and registry adapters.
+ * Geographic adapters (Overpass) require bbox.
+ * Registry adapters use query and optional incorporatedSince.
+ */
 export interface DiscoverInput {
-  bbox: BBox;
-  /** OSM amenity or shop tag values, e.g. restaurant, clinic, hairdresser. */
+  bbox?: BBox;
+  /** Free-text company or place name for registry search. */
+  query?: string;
+  /** OSM amenity or shop tag values, e.g. restaurant, clinic. */
   categories?: readonly string[];
+  /** ISO date (YYYY-MM-DD): only return entities incorporated on or after. */
+  incorporatedSince?: string;
+  /** Max results to return when the source supports pagination size. */
+  limit?: number;
   timeoutSeconds?: number;
 }
 
