@@ -2,29 +2,25 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 9
+## Phase 0 through Phase 11
 
-**Status:** done (docs, monorepo, core types, db, auth, Overpass, Companies House, EDGAR, crt.sh, HN, Adzuna, Meta Ad Library)
-
-## Phase 10-11: Remaining verified sources (BYOK search, OSM agency)
-
-**Goal:** Agency discovery without scraping forbidden directories.
-
-**Tasks:**
-- [x] Verify OSM office=advertising_agency and related tags
-- [x] OsmAgencyAdapter + unit tests
-- [x] Verify Brave Search API terms, pricing, storage limits
-- [x] BraveSearchAdapter (BYOK) + unit tests
-- [x] Reject Clutch/Sortlist/DesignRush automated access in DATA_SOURCES
-- [x] Update DATA_SOURCES, .env.example, FILEMAP, HISTORY, PROJECT_PLAN
-
-**Status:** done
-
-**Blockers:** none (Brave requires tenant or platform API key at runtime)
+**Status:** done (docs, monorepo, core, db, auth, all primary source adapters)
 
 ## Phase 12: Scoring engine
 
-**Status:** not started
+**Goal:** Explainable 0-100 score with Need, Timing, Budget, Reach, Fit and evidence notes.
+
+**Tasks:**
+- [x] scoreLead pure function with caps matching ScoreBreakdownSchema
+- [x] Missing evidence rejects (not delivered)
+- [x] Served and contested penalties
+- [x] deriveWeightsFromOutcomes (requires 30+ samples, weights bounded 0.5-1.5)
+- [x] Unit tests
+- [x] Export from @scoutline/core; update FILEMAP, HISTORY, PROJECT_PLAN
+
+**Status:** done
+
+**Blockers:** none
 
 ## Phase 13: Audit engine integration
 
