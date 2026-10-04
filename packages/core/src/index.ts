@@ -51,3 +51,14 @@ export {
   type AgencyCredit,
   type Outcome,
 } from "./types.js";
+
+export {
+  SCORE_CAPS,
+  DEFAULT_WEIGHTS,
+  scoreLead,
+  deriveWeightsFromOutcomes,
+  type ScoringWeights,
+  type IcpProfile,
+  type ScoreInput,
+  type ScoreResult,
+} from "./scoring.js";
