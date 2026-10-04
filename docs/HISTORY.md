@@ -4,21 +4,21 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 | phase-1 through phase-11 | monorepo, domain, db, auth, sources
+## 2026-10-04 | phase-1 through phase-12 | monorepo through scoring
 
-Achieved: Nine source adapters, Better Auth, Drizzle schema, core types.
+Achieved: Sources, auth, db, scoring engine.
 
-## 2026-10-04 | phase-12 | scoring engine
+## 2026-10-04 | phase-13 | audit engine
 
-Goal: Explainable lead score (Need 0-40, Timing 0-25, Budget 0-15, Reach 0-10, Fit 0-10).
+Goal: Deterministic SEO, technical, and AEO findings from HTML snapshots.
 
 Done:
-- packages/core/src/scoring.ts: scoreLead, SCORE_CAPS, DEFAULT_WEIGHTS, deriveWeightsFromOutcomes
-- Need from audit finding severity; Timing exponential decay by signal type; Budget from spend-like signals; Reach from contact verification; Fit from ICP country/niche/service
-- Rejects missing_evidence; penalties for served and contested freshness
-- Per-tenant weight learning after 30 outcomes, multipliers clamped to [0.5, 1.5]
-- Unit tests for reject, need, served penalty, reach, fit, and weight derivation
+- packages/audit/src/html.ts: title, meta, H1, canonical, viewport, JSON-LD, FAQPage helpers
+- packages/audit/src/checks/seo.ts, technical.ts, aeo.ts
+- packages/audit/src/run.ts: runAudit with optional serviceKeys filter
+- Unit tests: bare HTTP page fails key checks; complete HTTPS page does not flag missing title/H1/FAQ
+- Findings carry evidenceUrl and serviceKeys for scoreLead and proof reports
 
-Achieved: Scoring is pure, testable, and explainable via breakdown.notes and evidenceLinks.
+Achieved: Audit engine is pure (no network). Worker/enrich will fetch pages and pass snapshots in later phases.
 
-Next: Phase 13 audit engine integration.
+Next: Worker and BullMQ pipeline, or proof report generation.
