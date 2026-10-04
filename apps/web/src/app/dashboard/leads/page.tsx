@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { MODES, SERVICES } from "@scoutline/core";
 
 /**
@@ -34,7 +35,10 @@ export default function LeadsPage() {
           </thead>
           <tbody>
             <tr>
-              <td colSpan={5} style={{ padding: "2rem 1rem", color: "#64748b", textAlign: "center" }}>
+              <td
+                colSpan={5}
+                style={{ padding: "2rem 1rem", color: "#64748b", textAlign: "center" }}
+              >
                 No leads yet. Create a search to start discovery across{" "}
                 {MODES.length} modes and {SERVICES.length} services.
               </td>
@@ -46,7 +50,7 @@ export default function LeadsPage() {
   );
 }
 
-const th: React.CSSProperties = {
+const th: CSSProperties = {
   padding: "0.65rem 1rem",
   fontWeight: 600,
   borderBottom: "1px solid #e2e8f0",
