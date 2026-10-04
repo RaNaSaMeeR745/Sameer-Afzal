@@ -24,17 +24,22 @@ Achieved: email/password, OAuth, TOTP, sign-in/up pages, session-gated dashboard
 
 ## 2026-10-04 | phase-5 | OpenStreetMap Overpass source adapter
 
-Goal: First free local-business data source with verified terms.
+Achieved: OverpassAdapter with verified fair-use handling.
+
+## 2026-10-04 | phase-6 | UK Companies House and SEC EDGAR adapters
+
+Goal: New-business and filing signal sources with verified terms.
 
 Done:
-- Verified Overpass policy from wiki.openstreetmap.org (2026-10-04): User-Agent required, fair-use ~10k queries/1GB day for one-off (divide by 100 for regular apps), pause 30s on 429/406, commercial regular use should prefer self-hosted or paid instances
-- packages/sources/src/types.ts: SourceAdapter, SourceCandidate, BBox, DiscoverInput/Result
-- packages/sources/src/overpass.ts: buildOverpassQuery, OverpassAdapter (POST interpreter, maps named amenities/shops, domain extraction, OSM evidence URLs)
-- packages/sources/src/overpass.test.ts: query builder and mocked fetch tests
-- DATA_SOURCES.md: Overpass status set to implemented with verification notes
+- Companies House: verified 600 req/5min, free API key, Basic auth (developer.company-information.service.gov.uk, 2026-10-04). Adapter supports search and advanced incorporated_from.
+- EDGAR: verified User-Agent + 10 req/s fair access, no key (efts.sec.gov, 2026-10-04). Adapter searches filings and dedupes by CIK.
+- DiscoverInput extended with optional query, incorporatedSince, limit; bbox optional for registry sources.
+- Unit tests with mocked fetch for both adapters.
+- COMPANIES_HOUSE_API_KEY added to .env.example (name only).
+- DATA_SOURCES.md statuses set to implemented with verification notes.
 
-Achieved: @scoutline/sources can discover local businesses from OSM within a bbox without scraping forbidden sources.
+Achieved: Three free sources implemented (Overpass, Companies House, EDGAR).
 
-Problems: Live Overpass call not exercised in agent environment. Unit tests use injected fetch.
+Problems: Live API calls not run in agent environment. Companies House needs a registered key before production use.
 
-Next: Phase 6 (UK Companies House and/or SEC EDGAR).
+Next: Phase 7 (Certificate Transparency crt.sh).
