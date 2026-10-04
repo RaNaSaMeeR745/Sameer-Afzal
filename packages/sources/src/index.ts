@@ -17,3 +17,10 @@ export {
   DEFAULT_SHOP_TAGS,
   type OverpassAdapterOptions,
 } from "./overpass.js";
+
+export {
+  CompaniesHouseAdapter,
+  type CompaniesHouseAdapterOptions,
+} from "./companies-house.js";
+
+export { EdgarAdapter, type EdgarAdapterOptions } from "./edgar.js";
