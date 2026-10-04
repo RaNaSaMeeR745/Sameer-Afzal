@@ -59,7 +59,9 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 - [ ] Zod schemas for validation
 - [ ] Unit tests for pure helpers
 
-**Status:** not started
+**Status:** in progress
+
+**Blockers:** none
 
 ## Phase 3: Database schema and Drizzle setup
 
