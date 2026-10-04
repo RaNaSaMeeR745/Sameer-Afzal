@@ -62,3 +62,9 @@ export {
   type ScoreInput,
   type ScoreResult,
 } from "./scoring.js";
+
+export {
+  buildProofReport,
+  type ProofReportInput,
+  type ProofReport,
+} from "./proof.js";
