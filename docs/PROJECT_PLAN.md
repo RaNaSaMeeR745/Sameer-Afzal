@@ -28,23 +28,21 @@ Phases are sized for 15 to 20 minutes of focused work. Status values: not starte
 
 ## Phase 6: UK Companies House and SEC EDGAR adapters
 
-**Goal:** Verify terms and implement new-business / filing signal sources.
-
-**Tasks:**
-- [x] Verify Companies House rate limits and auth (600/5min, API key Basic auth)
-- [x] Verify SEC EDGAR fair access (User-Agent, 10 req/s, no key)
-- [x] Extend DiscoverInput for query and incorporatedSince
-- [x] CompaniesHouseAdapter + unit tests
-- [x] EdgarAdapter + unit tests
-- [x] Update DATA_SOURCES, .env.example, FILEMAP, HISTORY, PROJECT_PLAN
-
 **Status:** done
-
-**Blockers:** none (Companies House requires a registered free API key at runtime)
 
 ## Phase 7: Certificate Transparency (crt.sh) adapter
 
-**Status:** not started
+**Goal:** Verify crt.sh public CT search and implement domain discovery from new certificates.
+
+**Tasks:**
+- [x] Verify crt.sh access model and rate guidance (~60 req/min historical)
+- [x] CrtShAdapter with output=json, not_before filter, hostname mapping
+- [x] Unit tests (mapCrtShRow, mocked fetch)
+- [x] Update DATA_SOURCES, FILEMAP, HISTORY, PROJECT_PLAN
+
+**Status:** done
+
+**Blockers:** none
 
 ## Phase 8: Hiring signal adapters (HN Algolia and/or Adzuna)
 
