@@ -138,6 +138,10 @@ export class OverpassAdapter implements SourceAdapter {
   }
 
   async discover(input: DiscoverInput): Promise<DiscoverResult> {
+    if (!input.bbox) {
+      throw new Error("Overpass discover requires a bbox");
+    }
+
     const categories = input.categories ?? [...DEFAULT_AMENITY_TAGS];
     const query = buildOverpassQuery(
       input.bbox,
