@@ -22,7 +22,7 @@ export default function SearchesPage() {
         <ul style={{ margin: 0, paddingLeft: "1.2rem", lineHeight: 1.6 }}>
           {MODES.map((m) => (
             <li key={m.key}>
-              <strong>{m.label}</strong> ({m.leadType}) — {m.description}
+              <strong>{m.label}</strong> ({m.type}) — {m.whoItFinds}
             </li>
           ))}
         </ul>
