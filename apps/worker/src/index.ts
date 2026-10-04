@@ -6,11 +6,13 @@ import {
   type DiscoverJobData,
   type AuditJobData,
   type EnrichJobData,
+  type ProveJobData,
 } from "./queues.js";
 import { processDiscoverJob } from "./jobs/discover.js";
 import { processAuditJob } from "./jobs/audit.js";
 import { processScoreJob, type ScoreJobPayload } from "./jobs/score.js";
 import { processEnrichJob } from "./jobs/enrich.js";
+import { processProveJob } from "./jobs/prove.js";
 
 export const APP_NAME = "@scoutline/worker" as const;
 
@@ -30,6 +32,10 @@ async function main(): Promise<void> {
     defaultJobOptions: DEFAULT_JOB_OPTIONS,
   });
   const scoreQueue = new Queue(QUEUE_NAMES.score, {
+    connection,
+    defaultJobOptions: DEFAULT_JOB_OPTIONS,
+  });
+  const proveQueue = new Queue(QUEUE_NAMES.prove, {
     connection,
     defaultJobOptions: DEFAULT_JOB_OPTIONS,
   });
@@ -58,6 +64,12 @@ async function main(): Promise<void> {
     { connection, concurrency: 4 },
   );
 
+  const proveWorker = new Worker(
+    QUEUE_NAMES.prove,
+    async (job) => processProveJob(job),
+    { connection, concurrency: 4 },
+  );
+
   const onFailed =
     (queueLabel: string) => (job: { id?: string } | undefined, err: Error) => {
       console.error(
@@ -70,6 +82,7 @@ async function main(): Promise<void> {
   enrichWorker.on("failed", onFailed("enrich"));
   auditWorker.on("failed", onFailed("audit"));
   scoreWorker.on("failed", onFailed("score"));
+  proveWorker.on("failed", onFailed("prove"));
 
   discoverWorker.on("completed", (job) => {
     console.log(
@@ -91,8 +104,15 @@ async function main(): Promise<void> {
       `[score] job ${job.id} completed (score=${job.returnvalue?.score ?? "n/a"})`,
     );
   });
+  proveWorker.on("completed", (job) => {
+    console.log(
+      `[prove] job ${job.id} completed (${job.returnvalue?.findingCount ?? 0} findings in report)`,
+    );
+  });
 
-  console.log(`${APP_NAME} listening on queues: discover, enrich, audit, score`);
+  console.log(
+    `${APP_NAME} listening on queues: discover, enrich, audit, score, prove`,
+  );
 
   const shutdown = async () => {
     console.log(`${APP_NAME} shutting down`);
@@ -101,10 +121,12 @@ async function main(): Promise<void> {
       enrichWorker.close(),
       auditWorker.close(),
       scoreWorker.close(),
+      proveWorker.close(),
       discoverQueue.close(),
       enrichQueue.close(),
       auditQueue.close(),
       scoreQueue.close(),
+      proveQueue.close(),
       connection.quit(),
     ]);
     process.exit(0);
@@ -123,4 +145,10 @@ main().catch((err: unknown) => {
   process.exit(1);
 });
 
-export type { DiscoverJobData, AuditJobData, EnrichJobData, ScoreJobPayload };
+export type {
+  DiscoverJobData,
+  AuditJobData,
+  EnrichJobData,
+  ProveJobData,
+  ScoreJobPayload,
+};
