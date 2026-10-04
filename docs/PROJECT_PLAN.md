@@ -2,29 +2,26 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 14
+## Phase 0 through Phase 15
 
-**Status:** done (docs through worker queues for discover, audit, score)
+**Status:** done (docs through enrich page fetch)
 
-## Phase 15: Enrich job and page fetch
+## Phase 16: Proof report generation
 
-**Goal:** Polite public-page fetch, contact extraction, tech fingerprint, enrich worker.
+**Goal:** Self-contained HTML proof asset from findings and score.
 
 **Tasks:**
-- [x] fetchPage with User-Agent, robots.txt, timeout, size cap, private-host SSRF guard
-- [x] extractContacts (mailto, tel, text emails)
-- [x] fingerprintTech (CMS and analytics hints)
-- [x] enrichEntity orchestrator
-- [x] processEnrichJob + register enrich worker
-- [x] Unit tests; update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] buildProofReport with escaped HTML, score grid, sorted findings
+- [x] Unit tests (XSS escape)
+- [x] ProveJobData + processProveJob + prove worker
+- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none
+**Blockers:** none (S3 upload of HTML/PDF can follow when object storage is wired)
 
 ## Later phases
 
-- Proof report generation
 - Messaging drafts
 - Billing with Paddle
 - Dashboard UI
