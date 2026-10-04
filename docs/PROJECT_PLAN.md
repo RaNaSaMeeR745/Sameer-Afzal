@@ -2,28 +2,28 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 17
+## Phase 0 through Phase 18
 
-**Status:** done (docs through messaging drafts)
+**Status:** done (docs through Paddle billing core)
 
-## Phase 18: Billing with Paddle
+## Phase 19: Dashboard UI
 
-**Goal:** Plan catalog, idempotent credits, Paddle webhook signature verification.
+**Goal:** Authenticated workspace shell for leads, searches, and billing.
 
 **Tasks:**
-- [x] PLANS matching STRATEGY (trial/starter/growth/agency)
-- [x] Credit ledger grant/spend with duplicate event protection
-- [x] verifyPaddleSignature (ts + raw body HMAC-SHA256)
-- [x] parsePaddleEvent
-- [x] Unit tests; update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] Dashboard layout with session gate and nav
+- [x] Overview with stats and onboarding steps
+- [x] Leads table empty state (binds when persistence lands)
+- [x] Searches page listing modes and service catalog from @scoutline/core
+- [x] Billing page rendering PLANS from @scoutline/billing
+- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for library code. HTTP webhook route and Paddle price ids wire in dashboard/API phase.
+**Blockers:** none for UI shell. Live lead rows need DB write path from worker jobs.
 
 ## Later phases
 
-- Dashboard UI
 - Landing pages and SEO content
 - Public API
 - Exclusivity claims
