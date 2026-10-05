@@ -4,19 +4,19 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 through 2026-10-05 | phase-1 through phase-21
+## 2026-10-04 through 2026-10-05 | phase-1 through phase-22
 
-Pipeline, billing, dashboard, marketing, public API.
+Pipeline through exclusivity claims.
 
-## 2026-10-05 | phase-22 | exclusivity claims
+## 2026-10-05 | phase-23 | learning from outcomes
 
-Goal: Tenants can claim entities so others see them as contested.
+Goal: Bounded, reversible, explained score weight learning.
 
 Done:
-- packages/core/src/claims.ts: tryCreateClaim, claimsOverlap, applyClaimsToFreshness, 14-day default TTL
-- Unit tests for foreign overlap, niche non-overlap, freshness downgrade
-- POST /api/v1/claims with API key auth
+- packages/core/src/learning.ts: learnWeightsFromOutcomes (min 30 samples), explainWeightDeltas
+- Unit tests for not-ready and mixed win/loss derivation
+- POST /api/v1/outcomes returns learning result for a submitted batch
 
-Achieved: Claim decision logic is pure and testable; HTTP create endpoint exists.
+Achieved: Tenants can drive scoring weights from outcomes once volume exists.
 
-Next: Learning from outcomes (per-tenant score weight updates).
+Next: 30-day validation plan or DB persistence for pipeline writes.
