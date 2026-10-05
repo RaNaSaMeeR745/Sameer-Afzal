@@ -1,19 +1,19 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## apps/web dashboard (Phase 19)
+## Marketing (Phase 20)
 
 | Path | Purpose |
 |------|---------|
-| apps/web/src/app/dashboard/layout.tsx | Auth shell + nav |
-| apps/web/src/app/dashboard/page.tsx | Overview |
-| apps/web/src/app/dashboard/leads/page.tsx | Leads table |
-| apps/web/src/app/dashboard/searches/page.tsx | Modes and services |
-| apps/web/src/app/dashboard/billing/page.tsx | Plan catalog |
+| apps/web/src/app/page.tsx | Homepage |
+| apps/web/src/app/pricing/page.tsx | Pricing |
+| apps/web/src/app/layout.tsx | SEO metadata |
+| apps/web/public/robots.txt | Crawler rules |
+| apps/web/public/llms.txt | AI product summary |
 
-## packages
+## Dashboard (Phase 19)
 
-billing, ai, audit, enrich, sources, core, db
+layout, overview, leads, searches, billing
 
-## apps/worker
+## Packages and worker
 
-jobs: discover, enrich, audit, score, prove, message
+core, sources, audit, enrich, ai, billing, db, worker jobs
