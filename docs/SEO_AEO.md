@@ -6,15 +6,22 @@
 - Be cited by AI answer engines (AEO / GEO) for agency lead-generation queries
 - Provide embeddable free tools that create backlinks and capture inbound leads
 
-## Initial page inventory (to be built in later phases)
+## Implemented pages (Phase 20)
 
-- Homepage with clear positioning and proof claims
-- Pricing page with published tiers and "best for" tags
-- Comparison pages: Scoutline vs Apollo, Scoutline vs Clay, etc. (honest tables)
-- Alternatives pages: Apollo alternative for agencies, Clay alternative, etc.
-- Tool landing pages: free website audit for prospecting, AEO readiness checker, AI search visibility checker, cold email opener generator, agency lead score calculator
-- Informational hub: cold outreach for agencies, GDPR cold email B2B rules, how to find hiring signals, etc.
-- Year-stamped roundups: best lead generation tools for agencies 2026 (and subsequent years)
+- Homepage `/` with positioning, how-it-works, modes, FAQ
+- Pricing `/pricing` with published tiers and best-for tags
+- Root metadata: title template, description, keywords, Open Graph, Twitter
+- JSON-LD: SoftwareApplication + FAQPage on homepage
+- `public/robots.txt`: allow marketing, disallow dashboard and auth routes
+- `public/llms.txt`: product summary for AI crawlers
+
+## Remaining page inventory
+
+- Comparison pages: Scoutline vs Apollo, Scoutline vs Clay (honest tables)
+- Alternatives pages: Apollo alternative for agencies, Clay alternative
+- Tool landing pages: free website audit, AEO readiness checker, cold email opener, lead score calculator
+- Informational hub: cold outreach for agencies, GDPR B2B rules, hiring signals
+- Year-stamped roundups: best lead generation tools for agencies 2026+
 
 ## Technical SEO requirements
 
@@ -30,16 +37,14 @@
 - Answer-first content blocks that can be extracted by AI answer engines
 - Clear, citable statements of fact with sources where applicable
 - FAQ blocks on every commercial page
-- Original data (our own signal reports and case studies once available) to increase citation likelihood
+- Original data (signal reports and case studies once available) to increase citation likelihood
 
 ## Audit scores over time
 
-Scores will be recorded here after each major content or technical release.
-
 | Date | Tool | Score | Notes |
 |------|------|-------|-------|
-| (none yet) | | | |
+| 2026-10-05 | manual | n/a | Homepage and pricing shipped with FAQ schema and llms.txt |
 
 ## Current status
 
-Specification only. Implementation begins after the core product pipeline is functional.
+Phase 20 foundation shipped. Comparison pages and free tools not started.
