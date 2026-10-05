@@ -80,3 +80,11 @@ export {
   type ClaimRequest,
   type ClaimDecision,
 } from "./claims.js";
+
+export {
+  learnWeightsFromOutcomes,
+  explainWeightDeltas,
+  LEARNING_MIN_SAMPLES,
+  type OutcomeSample,
+  type WeightLearningResult,
+} from "./learning.js";
