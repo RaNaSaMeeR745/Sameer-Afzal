@@ -1,0 +1,32 @@
+# Scoutline
+
+> Signal-based lead generation for marketing agencies. Find clients that nobody else has pitched yet, with evidence, a proof report, and a personalized message.
+
+## Product
+
+- Homepage: /
+- Pricing: /pricing
+- Sign up (trial): /sign-up
+
+## What Scoutline does
+
+Scoutline discovers businesses from public signals (maps, company registries, jobs, ad libraries, certificate transparency, search), verifies service gaps on their sites, scores leads on need, timing, budget, reach, and fit, generates a proof report, and drafts outreach.
+
+It is not a shared contact database. Freshness classes: fresh (default), contested (opt-in), served (filtered).
+
+## Pricing (USD per workspace, unlimited seats)
+
+- Trial: free, 25 credits, 14 days, no card
+- Starter: $39/mo, 300 credits, 2 modes
+- Growth: $99/mo, 1,500 credits, all modes
+- Agency: $249/mo, 6,000 credits, API, exclusivity, white-label proofs
+
+One credit = one fully enriched, scored, evidence-backed lead.
+
+## Modes
+
+local_business, ecommerce_brand, b2b_company, hiring_company, agency
+
+## Optional
+
+- Docs in repository: docs/STRATEGY.md, docs/SEO_AEO.md, docs/DATA_SOURCES.md
