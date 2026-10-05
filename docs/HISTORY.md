@@ -4,21 +4,21 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 | phase-1 through phase-18 | monorepo through billing
+## 2026-10-04 | phase-1 through phase-19 | monorepo through dashboard UI
 
-Achieved: Full pipeline libraries and Paddle billing core.
+Achieved: Pipeline libraries, billing, dashboard shell.
 
-## 2026-10-04 | phase-19 | dashboard UI
+## 2026-10-05 | phase-20 | landing pages and SEO
 
-Goal: Authenticated workspace shell.
+Goal: Marketable public surface with AEO-friendly structure.
 
 Done:
-- apps/web/src/app/dashboard/layout.tsx: session gate, nav (Overview, Leads, Searches, Billing)
-- Overview stats and get-started steps
-- Leads table empty state using real mode/service counts
-- Searches page: MODES and SERVICES from @scoutline/core
-- Billing page: PLANS from @scoutline/billing
+- apps/web root metadata: title template, description, keywords, Open Graph, Twitter
+- Homepage: positioning headline, CTAs, how-it-works, modes list, FAQ details
+- JSON-LD SoftwareApplication + FAQPage
+- /pricing with best-for tags from @scoutline/billing PLANS
+- public/robots.txt and public/llms.txt
 
-Achieved: Operators can sign in and navigate the product surface.
+Achieved: Marketing pages live in the Next.js app.
 
-Next: Landing pages and SEO content, or public API webhook routes.
+Next: Public API (Paddle webhook route and lead export endpoints).
