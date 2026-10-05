@@ -21,67 +21,49 @@ Bootstrap keys can be supplied via `SCOUTLINE_API_KEYS` as
 
 Liveness probe. No auth.
 
-```json
-{ "ok": true, "service": "scoutline-web", "time": "ISO-8601" }
-```
-
 ### GET /api/v1/leads
 
-List leads for the authenticated tenant.
-
-Query parameters:
-
-| Name | Description |
-|------|-------------|
-| page | 1-based page (default 1) |
-| pageSize | 1-100 (default 20) |
-| freshness | optional: fresh, contested, served |
-
-Response:
-
-```json
-{
-  "data": [],
-  "pagination": { "page": 1, "pageSize": 20, "total": 0 },
-  "tenantId": "..."
-}
-```
-
-Empty `data` is expected until worker jobs persist tenant_leads.
-
-Errors: `401 unauthorized`, `400 invalid_freshness`.
+List leads for the authenticated tenant. Query: `page`, `pageSize`, `freshness`.
+Empty `data` until worker persistence is connected.
 
 ### POST /api/v1/claims
 
-Create an exclusivity claim for an entity.
+Create an exclusivity claim. Body: `entityId`, optional `niche`, `geography`, `ttlMs`.
+Default TTL 14 days. See `@scoutline/core` claim helpers.
+
+### POST /api/v1/outcomes
+
+Submit outcome samples and receive learned scoring weights when ready.
 
 Body:
 
 ```json
 {
-  "entityId": "uuid",
-  "niche": "seo",
-  "geography": "US-CA",
-  "ttlMs": 1209600000
+  "samples": [
+    {
+      "breakdown": {
+        "need": 30,
+        "timing": 20,
+        "budget": 10,
+        "reach": 5,
+        "fit": 5,
+        "evidenceLinks": [],
+        "notes": []
+      },
+      "result": "won"
+    }
+  ]
 }
 ```
 
-`niche` and `geography` are optional (null = broad claim). Default TTL is 14 days.
+`result` is one of: `replied`, `call_booked`, `won`, `lost`.
 
-Success `201`: `{ "claim": { id, tenantId, entityId, niche, geography, createdAt, expiresAt } }`.
-
-Errors: `401 unauthorized`, `400 entity_id_required | already_claimed_by_self | invalid_ttl`, `409 already_claimed_by_other`.
-
-Overlap rules and freshness impact are implemented in `@scoutline/core` (`tryCreateClaim`, `applyClaimsToFreshness`). Shared store for cross-tenant overlap checks is pending DB wiring.
+Response includes `learning.ready`, `sampleCount`, `weights` (null if under 30 samples),
+`explanation` (UI strings), and `baseline` defaults. Multipliers are bounded to [0.5, 1.5].
 
 ### POST /api/webhooks/paddle
 
-Paddle Billing notifications. Requires header `Paddle-Signature` and env
-`PADDLE_WEBHOOK_SECRET`. Body must be the raw request body for HMAC verification
-(`ts:rawBody` per Paddle Billing docs).
-
-Success: `{ received, eventId, eventType, creditGrant }`.
-Errors: `401 invalid_signature`, `400 invalid_payload`, `503 webhook_not_configured`.
+Paddle Billing notifications. Requires `Paddle-Signature` and `PADDLE_WEBHOOK_SECRET`.
 
 ## Planned (not yet implemented)
 
@@ -93,5 +75,4 @@ Errors: `401 invalid_signature`, `400 invalid_payload`, `503 webhook_not_configu
 
 ## Rate limits
 
-Not enforced in this phase. Planned per-tenant limits will be documented here
-when Redis rate limiting is attached.
+Not enforced in this phase.
