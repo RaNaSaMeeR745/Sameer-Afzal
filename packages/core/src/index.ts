@@ -68,3 +68,15 @@ export {
   type ProofReportInput,
   type ProofReport,
 } from "./proof.js";
+
+export {
+  DEFAULT_CLAIM_TTL_MS,
+  isClaimActive,
+  claimsOverlap,
+  tryCreateClaim,
+  applyClaimsToFreshness,
+  activeClaimsForEntity,
+  type ExclusivityClaim,
+  type ClaimRequest,
+  type ClaimDecision,
+} from "./claims.js";
