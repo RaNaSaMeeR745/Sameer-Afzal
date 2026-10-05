@@ -1,14 +1,11 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## Public API (Phase 21)
+## Claims (Phase 22)
 
 | Path | Purpose |
 |------|---------|
-| apps/web/src/lib/api-auth.ts | API key auth |
-| apps/web/src/app/api/health/route.ts | Health |
-| apps/web/src/app/api/v1/leads/route.ts | List leads |
-| apps/web/src/app/api/webhooks/paddle/route.ts | Paddle webhook |
+| packages/core/src/claims.ts | Exclusivity logic |
+| packages/core/src/claims.test.ts | Unit tests |
+| apps/web/src/app/api/v1/claims/route.ts | POST claim |
 
-## Marketing (20) · Dashboard (19) · packages · worker
-
-See prior phases.
+## API (21) · Marketing (20) · Dashboard (19) · packages · worker
