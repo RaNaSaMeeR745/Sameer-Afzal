@@ -51,6 +51,29 @@ Empty `data` is expected until worker jobs persist tenant_leads.
 
 Errors: `401 unauthorized`, `400 invalid_freshness`.
 
+### POST /api/v1/claims
+
+Create an exclusivity claim for an entity.
+
+Body:
+
+```json
+{
+  "entityId": "uuid",
+  "niche": "seo",
+  "geography": "US-CA",
+  "ttlMs": 1209600000
+}
+```
+
+`niche` and `geography` are optional (null = broad claim). Default TTL is 14 days.
+
+Success `201`: `{ "claim": { id, tenantId, entityId, niche, geography, createdAt, expiresAt } }`.
+
+Errors: `401 unauthorized`, `400 entity_id_required | already_claimed_by_self | invalid_ttl`, `409 already_claimed_by_other`.
+
+Overlap rules and freshness impact are implemented in `@scoutline/core` (`tryCreateClaim`, `applyClaimsToFreshness`). Shared store for cross-tenant overlap checks is pending DB wiring.
+
 ### POST /api/webhooks/paddle
 
 Paddle Billing notifications. Requires header `Paddle-Signature` and env
