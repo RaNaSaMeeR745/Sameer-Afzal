@@ -1,22 +1,74 @@
 # API.md - Public REST API and Webhooks Reference for Scoutline
 
-This document will contain the full public API reference once the API surface is implemented (later phases).
+API version prefix: `/api/v1`. Breaking changes require a new major version.
 
-## Planned surface (high level)
+## Authentication
 
-- Authentication: API keys scoped per tenant, with rate limits and audit log.
-- Endpoints (planned):
-  - GET /v1/leads (list with filters, pagination)
-  - GET /v1/leads/:id (single lead with score breakdown and evidence)
-  - POST /v1/searches (create or trigger a discovery run)
-  - GET /v1/searches/:id/status
-  - GET /v1/proof/:shareToken (public proof report)
-  - Webhooks: lead.ready, lead.replied, credit.low, claim.expired
+Public lead endpoints require:
 
-## Current status
+```
+Authorization: Bearer <api_key>
+```
 
-No public API endpoints exist yet. This file is a placeholder registered in Phase 0 so the documentation set is complete. Detailed request/response schemas, error codes, and rate limits will be added when the API is built and will be kept in sync with the implementation.
+Keys are hashed with SHA-256 before comparison (`apps/web/src/lib/api-auth.ts`).
+Bootstrap keys can be supplied via `SCOUTLINE_API_KEYS` as
+`tenantId:label:rawKey` (comma-separated). Production keys will live in the
+`api_keys` table.
 
-## Versioning
+## Implemented endpoints
 
-API will be versioned under /v1. Breaking changes will require a new major version.
+### GET /api/health
+
+Liveness probe. No auth.
+
+```json
+{ "ok": true, "service": "scoutline-web", "time": "ISO-8601" }
+```
+
+### GET /api/v1/leads
+
+List leads for the authenticated tenant.
+
+Query parameters:
+
+| Name | Description |
+|------|-------------|
+| page | 1-based page (default 1) |
+| pageSize | 1-100 (default 20) |
+| freshness | optional: fresh, contested, served |
+
+Response:
+
+```json
+{
+  "data": [],
+  "pagination": { "page": 1, "pageSize": 20, "total": 0 },
+  "tenantId": "..."
+}
+```
+
+Empty `data` is expected until worker jobs persist tenant_leads.
+
+Errors: `401 unauthorized`, `400 invalid_freshness`.
+
+### POST /api/webhooks/paddle
+
+Paddle Billing notifications. Requires header `Paddle-Signature` and env
+`PADDLE_WEBHOOK_SECRET`. Body must be the raw request body for HMAC verification
+(`ts:rawBody` per Paddle Billing docs).
+
+Success: `{ received, eventId, eventType, creditGrant }`.
+Errors: `401 invalid_signature`, `400 invalid_payload`, `503 webhook_not_configured`.
+
+## Planned (not yet implemented)
+
+- GET /api/v1/leads/:id
+- POST /api/v1/searches
+- GET /api/v1/searches/:id/status
+- GET /api/v1/proof/:shareToken
+- Outbound webhooks: lead.ready, lead.replied, credit.low, claim.expired
+
+## Rate limits
+
+Not enforced in this phase. Planned per-tenant limits will be documented here
+when Redis rate limiting is attached.
