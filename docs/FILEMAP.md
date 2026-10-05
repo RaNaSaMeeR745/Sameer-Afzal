@@ -1,11 +1,11 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## Claims (Phase 22)
+## Learning (Phase 23)
 
 | Path | Purpose |
 |------|---------|
-| packages/core/src/claims.ts | Exclusivity logic |
-| packages/core/src/claims.test.ts | Unit tests |
-| apps/web/src/app/api/v1/claims/route.ts | POST claim |
+| packages/core/src/learning.ts | Weight learning |
+| packages/core/src/learning.test.ts | Unit tests |
+| apps/web/src/app/api/v1/outcomes/route.ts | POST outcomes |
 
-## API (21) · Marketing (20) · Dashboard (19) · packages · worker
+## Claims (22) · API (21) · Marketing (20) · Dashboard (19)
