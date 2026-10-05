@@ -2,27 +2,26 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 21
+## Phase 0 through Phase 22
 
-**Status:** done (docs through public API)
+**Status:** done (docs through exclusivity claims)
 
-## Phase 22: Exclusivity claims
+## Phase 23: Learning from outcomes
 
-**Goal:** Claim logic so tenants can hold leads exclusively for a window.
+**Goal:** Per-tenant score weight learning after 30+ outcomes, explained in UI terms.
 
 **Tasks:**
-- [x] tryCreateClaim with overlap rules (entity + niche + geography)
-- [x] DEFAULT_CLAIM_TTL_MS (14 days)
-- [x] applyClaimsToFreshness (foreign claim → contested)
-- [x] Unit tests
-- [x] POST /api/v1/claims
+- [x] learnWeightsFromOutcomes wrapper with readiness and explanation
+- [x] explainWeightDeltas for dashboard copy
+- [x] Unit tests (below threshold / mixed wins-losses)
+- [x] POST /api/v1/outcomes
 - [x] Update FILEMAP, HISTORY, PROJECT_PLAN, API.md
 
 **Status:** done
 
-**Blockers:** none for pure logic. Shared claims table persistence pending.
+**Blockers:** none for pure learning. Durable outcome storage still pending.
 
 ## Later phases
 
-- Learning from outcomes
 - 30-day validation (Phase 35)
+- DB persistence of leads, claims, outcomes, and credit ledger
