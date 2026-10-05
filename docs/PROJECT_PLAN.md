@@ -2,29 +2,28 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 18
+## Phase 0 through Phase 19
 
-**Status:** done (docs through Paddle billing core)
+**Status:** done (docs through dashboard UI)
 
-## Phase 19: Dashboard UI
+## Phase 20: Landing pages and SEO content
 
-**Goal:** Authenticated workspace shell for leads, searches, and billing.
+**Goal:** Marketing homepage, pricing, robots/llms.txt, structured data.
 
 **Tasks:**
-- [x] Dashboard layout with session gate and nav
-- [x] Overview with stats and onboarding steps
-- [x] Leads table empty state (binds when persistence lands)
-- [x] Searches page listing modes and service catalog from @scoutline/core
-- [x] Billing page rendering PLANS from @scoutline/billing
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] Root metadata (title template, OG, Twitter, keywords)
+- [x] Homepage with positioning, how-it-works, modes, FAQ + FAQPage/SoftwareApplication JSON-LD
+- [x] Pricing page with best-for tags from PLANS
+- [x] public/robots.txt (allow marketing, disallow app routes)
+- [x] public/llms.txt for AI crawlers
+- [x] Update SEO_AEO, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for UI shell. Live lead rows need DB write path from worker jobs.
+**Blockers:** none. Comparison pages and free tools remain later content phases.
 
 ## Later phases
 
-- Landing pages and SEO content
 - Public API
 - Exclusivity claims
 - Learning from outcomes
