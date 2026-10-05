@@ -1,19 +1,14 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## Marketing (Phase 20)
+## Public API (Phase 21)
 
 | Path | Purpose |
 |------|---------|
-| apps/web/src/app/page.tsx | Homepage |
-| apps/web/src/app/pricing/page.tsx | Pricing |
-| apps/web/src/app/layout.tsx | SEO metadata |
-| apps/web/public/robots.txt | Crawler rules |
-| apps/web/public/llms.txt | AI product summary |
+| apps/web/src/lib/api-auth.ts | API key auth |
+| apps/web/src/app/api/health/route.ts | Health |
+| apps/web/src/app/api/v1/leads/route.ts | List leads |
+| apps/web/src/app/api/webhooks/paddle/route.ts | Paddle webhook |
 
-## Dashboard (Phase 19)
+## Marketing (20) · Dashboard (19) · packages · worker
 
-layout, overview, leads, searches, billing
-
-## Packages and worker
-
-core, sources, audit, enrich, ai, billing, db, worker jobs
+See prior phases.
