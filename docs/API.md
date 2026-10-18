@@ -4,16 +4,19 @@ API version prefix: `/api/v1`. Breaking changes require a new major version.
 
 ## Authentication
 
-Public lead endpoints require:
-
 ```
 Authorization: Bearer <api_key>
 ```
 
-Keys are hashed with SHA-256 before comparison (`apps/web/src/lib/api-auth.ts`).
-Bootstrap keys can be supplied via `SCOUTLINE_API_KEYS` as
-`tenantId:label:rawKey` (comma-separated). Production keys will live in the
-`api_keys` table.
+Keys: SHA-256 hashed (`apps/web/src/lib/api-auth.ts`). Bootstrap via
+`SCOUTLINE_API_KEYS=tenantId:label:rawKey` (comma-separated).
+
+## Database
+
+When `DATABASE_URL` is set, routes use `@scoutline/db` repositories.
+Without it, GET leads returns an empty page; claims still decide in memory
+but do not persist; outcomes learn from the request body only; Paddle
+acknowledges without writing the ledger.
 
 ## Implemented endpoints
 
@@ -23,56 +26,38 @@ Liveness probe. No auth.
 
 ### GET /api/v1/leads
 
-List leads for the authenticated tenant. Query: `page`, `pageSize`, `freshness`.
-Empty `data` until worker persistence is connected.
+List tenant leads. Query: `page`, `pageSize`, `freshness`.
+Response items include `id`, `entityId`, `score`, `freshnessClass`, `status`, `serviceKey`.
 
 ### POST /api/v1/claims
 
-Create an exclusivity claim. Body: `entityId`, optional `niche`, `geography`, `ttlMs`.
-Default TTL 14 days. See `@scoutline/core` claim helpers.
+Create exclusivity claim. Body: `entityId`, optional `niche`, `geography`, `ttlMs`.
+Overlap checked against active DB claims when available.
 
 ### POST /api/v1/outcomes
 
-Submit outcome samples and receive learned scoring weights when ready.
+Record outcomes and/or compute learning.
 
-Body:
+Single: `{ "leadId", "result", "reason?", "breakdown?" }`
+Batch: `{ "samples": [{ "leadId?", "breakdown?", "result" }] }`
 
-```json
-{
-  "samples": [
-    {
-      "breakdown": {
-        "need": 30,
-        "timing": 20,
-        "budget": 10,
-        "reach": 5,
-        "fit": 5,
-        "evidenceLinks": [],
-        "notes": []
-      },
-      "result": "won"
-    }
-  ]
-}
-```
-
-`result` is one of: `replied`, `call_booked`, `won`, `lost`.
-
-Response includes `learning.ready`, `sampleCount`, `weights` (null if under 30 samples),
-`explanation` (UI strings), and `baseline` defaults. Multipliers are bounded to [0.5, 1.5].
+Persists rows when `leadId` and DATABASE_URL are present. Learning uses
+stored samples plus the request payload. Response includes `persistedIds`
+and `learning`.
 
 ### POST /api/webhooks/paddle
 
-Paddle Billing notifications. Requires `Paddle-Signature` and `PADDLE_WEBHOOK_SECRET`.
+Requires `Paddle-Signature` and `PADDLE_WEBHOOK_SECRET`.
+Credit grant requires `custom_data.tenant_id` and `custom_data.plan_key`
+(`starter` | `growth` | `agency`). Uses event id as ledger `eventId`.
 
-## Planned (not yet implemented)
+## Planned
 
 - GET /api/v1/leads/:id
 - POST /api/v1/searches
-- GET /api/v1/searches/:id/status
 - GET /api/v1/proof/:shareToken
 - Outbound webhooks: lead.ready, lead.replied, credit.low, claim.expired
 
 ## Rate limits
 
-Not enforced in this phase.
+Not enforced yet.
