@@ -13,9 +13,13 @@
     "test": "node --import tsx --test src/**/*.test.ts"
   },
   "dependencies": {
+    "@scoutline/ai": "workspace:*",
+    "@scoutline/audit": "workspace:*",
     "@scoutline/billing": "workspace:*",
     "@scoutline/core": "workspace:*",
     "@scoutline/db": "workspace:*",
+    "@scoutline/enrich": "workspace:*",
+    "@scoutline/sources": "workspace:*",
     "bullmq": "^5.34.5",
     "ioredis": "^5.4.2"
   },
