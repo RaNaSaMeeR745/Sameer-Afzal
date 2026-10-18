@@ -27,35 +27,35 @@ Liveness probe. No auth.
 ### GET /api/v1/leads
 
 List tenant leads. Query: `page`, `pageSize`, `freshness`.
-Response items include `id`, `entityId`, `score`, `freshnessClass`, `status`, `serviceKey`.
 
 ### POST /api/v1/claims
 
 Create exclusivity claim. Body: `entityId`, optional `niche`, `geography`, `ttlMs`.
-Overlap checked against active DB claims when available.
 
 ### POST /api/v1/outcomes
 
-Record outcomes and/or compute learning.
+Record outcomes and/or compute learning. See Phase 23 docs.
 
-Single: `{ "leadId", "result", "reason?", "breakdown?" }`
-Batch: `{ "samples": [{ "leadId?", "breakdown?", "result" }] }`
+### GET /api/v1/proof/:shareToken
 
-Persists rows when `leadId` and DATABASE_URL are present. Learning uses
-stored samples plus the request payload. Response includes `persistedIds`
-and `learning`.
+Public proof report. No auth. Returns `text/html` when the stored asset
+contains a full HTML document. Increments view count. Errors: `400 invalid_token`,
+`404 not_found`, `503 database_not_configured`.
 
 ### POST /api/webhooks/paddle
 
 Requires `Paddle-Signature` and `PADDLE_WEBHOOK_SECRET`.
-Credit grant requires `custom_data.tenant_id` and `custom_data.plan_key`
-(`starter` | `growth` | `agency`). Uses event id as ledger `eventId`.
+Credit grant requires `custom_data.tenant_id` and `custom_data.plan_key`.
+
+## Pipeline (worker)
+
+Discover → enrich → audit → score → prove → message.
+Proof jobs write `proof_assets.share_token` and store HTML in `html_ref`.
 
 ## Planned
 
 - GET /api/v1/leads/:id
 - POST /api/v1/searches
-- GET /api/v1/proof/:shareToken
 - Outbound webhooks: lead.ready, lead.replied, credit.low, claim.expired
 
 ## Rate limits
