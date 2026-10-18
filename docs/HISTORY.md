@@ -4,23 +4,19 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 through 2026-10-05 | phase-1 through phase-23
+## 2026-10-04 through 2026-10-18 | phase-1 through phase-25
 
-Pipeline through outcome learning.
+Pipeline libraries, API, marketing, DB repos, API wiring.
 
-## 2026-10-18 | phase-24 | DB persistence repositories
+## 2026-10-18 | phase-26 | worker score-and-persist
 
-## 2026-10-18 | phase-25 | wire API to repositories
-
-Goal: API routes read and write Postgres when DATABASE_URL is set.
+Goal: Write scored leads to Postgres from the worker.
 
 Done:
-- apps/web/src/lib/db.ts: getDb / requireDb
-- GET /api/v1/leads uses listTenantLeads
-- POST /api/v1/claims loads active claims, inserts on success
-- POST /api/v1/outcomes persists with leadId and learns from stored samples
-- Paddle webhook calls persistGrant when custom_data has tenant_id and plan_key
+- packages/db/src/repos/entities.ts: ensureEntity by domain
+- packages/worker: QUEUE_NAMES, runScoreAndPersist, BullMQ score consumer
+- Flow: ensure entity → apply claims to freshness → scoreLead → upsertTenantLead → optional persistSpend
 
-Achieved: End-to-end API persistence path for leads, claims, outcomes, credits.
+Achieved: Deliverable leads can be persisted and billed one credit with idempotent event ids.
 
-Next: 30-day validation plan, or worker lead write path.
+Next: 30-day validation plan, or remaining pipeline queue workers.
