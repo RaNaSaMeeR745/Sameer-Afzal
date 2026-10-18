@@ -4,19 +4,20 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 through 2026-10-18 | phase-1 through phase-25
+## 2026-10-04 through 2026-10-18 | phase-1 through phase-26
 
-Pipeline libraries, API, marketing, DB repos, API wiring.
+Pipeline libraries through score-and-persist.
 
-## 2026-10-18 | phase-26 | worker score-and-persist
+## 2026-10-18 | phase-27 | pipeline queue workers
 
-Goal: Write scored leads to Postgres from the worker.
+Goal: Full BullMQ chain from discovery to scored leads.
 
 Done:
-- packages/db/src/repos/entities.ts: ensureEntity by domain
-- packages/worker: QUEUE_NAMES, runScoreAndPersist, BullMQ score consumer
-- Flow: ensure entity → apply claims to freshness → scoreLead → upsertTenantLead → optional persistSpend
+- packages/worker/src/adapters.ts: registry for all source adapters
+- jobs: discover, enrich, audit, prove, message
+- startWorkers: discover enqueues enrich; enrich enqueues audit; audit builds score payload and enqueues score
+- prove and message workers ready for explicit enqueue
 
-Achieved: Deliverable leads can be persisted and billed one credit with idempotent event ids.
+Achieved: Operator can enqueue a discover job and get scored tenant leads when Redis and DATABASE_URL are set.
 
-Next: 30-day validation plan, or remaining pipeline queue workers.
+Next: 30-day validation plan, or auto-enqueue prove/message after score.
