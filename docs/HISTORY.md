@@ -10,16 +10,17 @@ Pipeline through outcome learning.
 
 ## 2026-10-18 | phase-24 | DB persistence repositories
 
-Goal: Durable writes for leads, claims, outcomes, and credits.
+## 2026-10-18 | phase-25 | wire API to repositories
+
+Goal: API routes read and write Postgres when DATABASE_URL is set.
 
 Done:
-- Schema: credits_ledger.kind, credits_ledger.event_id (unique), outcomes.score_breakdown
-- packages/db/src/repos/leads.ts: upsertTenantLead, listTenantLeads
-- packages/db/src/repos/claims.ts: insertClaim, listActiveClaimsForEntity
-- packages/db/src/repos/outcomes.ts: insertOutcome, listOutcomeSamplesForTenant
-- packages/db/src/repos/credits.ts: listCreditEntries, persistGrant, persistSpend (idempotent via eventId)
-- drizzle/0002_credits_outcomes_columns.sql migration
+- apps/web/src/lib/db.ts: getDb / requireDb
+- GET /api/v1/leads uses listTenantLeads
+- POST /api/v1/claims loads active claims, inserts on success
+- POST /api/v1/outcomes persists with leadId and learns from stored samples
+- Paddle webhook calls persistGrant when custom_data has tenant_id and plan_key
 
-Achieved: Worker and API can persist pipeline results when DATABASE_URL is configured.
+Achieved: End-to-end API persistence path for leads, claims, outcomes, credits.
 
-Next: Wire API routes to repositories, or document 30-day validation plan.
+Next: 30-day validation plan, or worker lead write path.
