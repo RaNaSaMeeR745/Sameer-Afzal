@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
 import {
-  grantCredits,
   getPlan,
   parsePaddleEvent,
   verifyPaddleSignature,
   type PlanKey,
 } from "@scoutline/billing";
+import { persistGrant } from "@scoutline/db";
+import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 /**
  * Paddle Billing notification endpoint.
- * Verifies Paddle-Signature against the raw body, then acknowledges the event.
- * Credit grants are computed here; durable ledger writes attach when DB is wired.
+ * Verifies Paddle-Signature, then grants credits when custom_data includes
+ * tenant_id and plan_key and DATABASE_URL is configured.
  */
 export async function POST(request: Request) {
   const secret = process.env.PADDLE_WEBHOOK_SECRET;
@@ -35,21 +36,49 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_payload" }, { status: 400 });
   }
 
-  // Idempotent acknowledgment. Ledger persistence uses event.eventId as eventId.
-  const creditHint = creditGrantForEvent(event.eventType, event.data);
+  const grant = resolveCreditGrant(event.eventType, event.data);
+  let persisted: {
+    ok: boolean;
+    reason: string | null;
+    balanceAfter: number | null;
+  } | null = null;
+
+  if (grant) {
+    const db = getDb();
+    if (db) {
+      const result = await persistGrant(db, {
+        tenantId: grant.tenantId,
+        amount: grant.credits,
+        reason: `paddle:${event.eventType}:${grant.planKey}`,
+        eventId: event.eventId,
+      });
+      persisted = {
+        ok: result.ok,
+        reason: result.reason,
+        balanceAfter: result.balanceAfter,
+      };
+    }
+  }
 
   return NextResponse.json({
     received: true,
     eventId: event.eventId,
     eventType: event.eventType,
-    creditGrant: creditHint,
+    creditGrant: grant
+      ? {
+          planKey: grant.planKey,
+          credits: grant.credits,
+          tenantId: grant.tenantId,
+        }
+      : null,
+    persisted,
   });
 }
 
-function creditGrantForEvent(
+function resolveCreditGrant(
   eventType: string,
   data: unknown,
-): { planKey: PlanKey; credits: number; eventIdSuffix: string } | null {
+): { planKey: PlanKey; credits: number; tenantId: string } | null {
   if (
     eventType !== "subscription.activated" &&
     eventType !== "subscription.created" &&
@@ -58,38 +87,29 @@ function creditGrantForEvent(
     return null;
   }
 
-  const planKey = inferPlanKey(data);
-  if (!planKey || planKey === "trial") {
-    return null;
-  }
-  const plan = getPlan(planKey);
-  // Build a deterministic grant preview (caller persists with grantCredits)
-  const preview = grantCredits({
-    tenantId: "pending",
-    amount: plan.creditsPerMonth,
-    reason: `paddle:${eventType}:${planKey}`,
-    eventId: `preview-${planKey}`,
-    id: "preview",
-    existing: [],
-  });
-  if (!preview.ok || !preview.entry) {
-    return null;
-  }
-  return {
-    planKey,
-    credits: plan.creditsPerMonth,
-    eventIdSuffix: planKey,
-  };
-}
-
-function inferPlanKey(data: unknown): PlanKey | null {
   if (!data || typeof data !== "object") {
     return null;
   }
-  const custom = (data as { custom_data?: { plan_key?: string } }).custom_data;
-  const key = custom?.plan_key;
-  if (key === "starter" || key === "growth" || key === "agency") {
-    return key;
+
+  const custom = (
+    data as {
+      custom_data?: { plan_key?: string; tenant_id?: string };
+    }
+  ).custom_data;
+
+  const planKey = custom?.plan_key;
+  const tenantId = custom?.tenant_id;
+  if (!tenantId) {
+    return null;
   }
-  return null;
+  if (planKey !== "starter" && planKey !== "growth" && planKey !== "agency") {
+    return null;
+  }
+
+  const plan = getPlan(planKey);
+  return {
+    planKey,
+    credits: plan.creditsPerMonth,
+    tenantId,
+  };
 }
