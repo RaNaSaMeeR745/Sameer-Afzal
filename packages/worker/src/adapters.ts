@@ -12,32 +12,35 @@ import {
 } from "@scoutline/sources";
 
 /**
- * Resolve a source adapter by id using environment credentials where required.
+ * Resolve a source adapter by canonical id (matches each adapter's `.id`).
+ * Aliases accept short names used in job payloads.
  */
 export function getSourceAdapter(adapterId: string): SourceAdapter {
-  switch (adapterId) {
-    case "overpass":
+  const id = normalizeAdapterId(adapterId);
+
+  switch (id) {
+    case "openstreetmap_overpass":
       return new OverpassAdapter();
-    case "osm_agency":
+    case "openstreetmap_agency":
       return new OsmAgencyAdapter();
-    case "companies_house": {
+    case "uk_companies_house": {
       const key = process.env.COMPANIES_HOUSE_API_KEY;
       if (!key) {
-        throw new Error("COMPANIES_HOUSE_API_KEY is required for companies_house");
+        throw new Error("COMPANIES_HOUSE_API_KEY is required for uk_companies_house");
       }
       return new CompaniesHouseAdapter({ apiKey: key });
     }
-    case "edgar":
+    case "us_edgar":
       return new EdgarAdapter();
     case "crtsh":
       return new CrtShAdapter();
     case "hn_algolia":
       return new HnAlgoliaAdapter();
-    case "adzuna": {
+    case "adzuna_jobs": {
       const appId = process.env.ADZUNA_APP_ID;
       const appKey = process.env.ADZUNA_APP_KEY;
       if (!appId || !appKey) {
-        throw new Error("ADZUNA_APP_ID and ADZUNA_APP_KEY are required for adzuna");
+        throw new Error("ADZUNA_APP_ID and ADZUNA_APP_KEY are required for adzuna_jobs");
       }
       return new AdzunaAdapter({ appId, appKey });
     }
@@ -62,14 +65,29 @@ export function getSourceAdapter(adapterId: string): SourceAdapter {
   }
 }
 
+function normalizeAdapterId(raw: string): string {
+  const aliases: Record<string, string> = {
+    overpass: "openstreetmap_overpass",
+    osm: "openstreetmap_overpass",
+    osm_agency: "openstreetmap_agency",
+    companies_house: "uk_companies_house",
+    edgar: "us_edgar",
+    adzuna: "adzuna_jobs",
+    hn: "hn_algolia",
+    meta: "meta_ad_library",
+    brave: "brave_search",
+  };
+  return aliases[raw] ?? raw;
+}
+
 export const SOURCE_ADAPTER_IDS = [
-  "overpass",
-  "osm_agency",
-  "companies_house",
-  "edgar",
+  "openstreetmap_overpass",
+  "openstreetmap_agency",
+  "uk_companies_house",
+  "us_edgar",
   "crtsh",
   "hn_algolia",
-  "adzuna",
+  "adzuna_jobs",
   "meta_ad_library",
   "brave_search",
 ] as const;
