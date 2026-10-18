@@ -4,20 +4,20 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 through 2026-10-18 | phase-1 through phase-26
+## 2026-10-04 through 2026-10-18 | phase-1 through phase-27
 
-Pipeline libraries through score-and-persist.
+Pipeline through queue workers.
 
-## 2026-10-18 | phase-27 | pipeline queue workers
+## 2026-10-18 | phase-28 | proof tokens and auto-enqueue
 
-Goal: Full BullMQ chain from discovery to scored leads.
+Goal: Deliver proof reports and outreach drafts after scoring.
 
 Done:
-- packages/worker/src/adapters.ts: registry for all source adapters
-- jobs: discover, enrich, audit, prove, message
-- startWorkers: discover enqueues enrich; enrich enqueues audit; audit builds score payload and enqueues score
-- prove and message workers ready for explicit enqueue
+- packages/db proof repos: insert, lookup by shareToken, view count
+- runProve stores share token and HTML
+- score → prove → message queue chain
+- GET /api/v1/proof/:shareToken serves public HTML
 
-Achieved: Operator can enqueue a discover job and get scored tenant leads when Redis and DATABASE_URL are set.
+Achieved: End-to-end path from discover job to shareable proof and message draft.
 
-Next: 30-day validation plan, or auto-enqueue prove/message after score.
+Next: 30-day validation plan (Phase 35).
