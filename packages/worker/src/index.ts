@@ -31,7 +31,7 @@ function connectionFromEnv(): IORedis {
 
 /**
  * Start BullMQ workers for the full pipeline.
- * discover → enrich → audit → score → prove → message (optional chain).
+ * discover → enrich → audit → score → prove → message.
  */
 export function startWorkers(): Worker[] {
   const connection = connectionFromEnv();
@@ -137,6 +137,7 @@ export function startWorkers(): Worker[] {
         serviceKey: result.serviceKey,
         modeKeys: result.modeKeys,
         spendCredit: true,
+        enqueueProve: true,
       };
 
       await scoreQueue.add("score", scorePayload, {
@@ -152,7 +153,39 @@ export function startWorkers(): Worker[] {
   const scoreWorker = new Worker(
     QUEUE_NAMES.score,
     async (job: Job<ScoreAndPersistPayload>) => {
-      return runScoreAndPersist(job.data);
+      const result = await runScoreAndPersist(job.data);
+      if (
+        !result.rejected &&
+        result.leadId &&
+        result.breakdown &&
+        result.enqueueProve
+      ) {
+        const entityUrl = result.entityDomain
+          ? `https://${result.entityDomain}`
+          : null;
+        await proveQueue.add(
+          "prove",
+          {
+            tenantId: job.data.tenantId,
+            leadId: result.leadId,
+            entityName: result.entityName,
+            entityDomain: result.entityDomain,
+            entityUrl,
+            serviceLabel: result.serviceLabel,
+            freshnessClass: result.freshnessClass,
+            score: result.score,
+            breakdown: result.breakdown,
+            findings: result.findings,
+            preparedBy: result.preparedBy,
+            enqueueMessage: true,
+            senderName: "Agency team",
+            senderAgency: result.preparedBy,
+            channel: "email",
+          } satisfies ProveJobPayload,
+          { removeOnComplete: 100, removeOnFail: 50 },
+        );
+      }
+      return result;
     },
     { connection },
   );
@@ -161,7 +194,32 @@ export function startWorkers(): Worker[] {
   const proveWorker = new Worker(
     QUEUE_NAMES.prove,
     async (job: Job<ProveJobPayload>) => {
-      return runProve(job.data);
+      const result = await runProve(job.data);
+      if (job.data.enqueueMessage) {
+        const baseUrl = process.env.BETTER_AUTH_URL ?? process.env.APP_URL ?? "";
+        const proofShareUrl = baseUrl
+          ? `${baseUrl.replace(/\/$/, "")}${result.sharePath}`
+          : result.sharePath;
+
+        await messageQueue.add(
+          "message",
+          {
+            tenantId: result.tenantId,
+            leadId: result.leadId,
+            entityName: job.data.entityName,
+            entityDomain: job.data.entityDomain,
+            contactName: job.data.contactName ?? null,
+            serviceLabel: job.data.serviceLabel ?? "marketing services",
+            senderName: job.data.senderName ?? "Agency team",
+            senderAgency: job.data.senderAgency ?? "Scoutline",
+            findings: job.data.findings,
+            proofShareUrl,
+            channel: job.data.channel ?? "email",
+          } satisfies MessageJobPayload,
+          { removeOnComplete: 100, removeOnFail: 50 },
+        );
+      }
+      return result;
     },
     { connection },
   );
@@ -181,10 +239,6 @@ export function startWorkers(): Worker[] {
       console.error(`[${w.name}] job ${job?.id ?? "unknown"} failed:`, err.message);
     });
   }
-
-  // Keep queue refs so TypeScript does not strip unused locals in some builds
-  void proveQueue;
-  void messageQueue;
 
   return workers;
 }
