@@ -1,14 +1,13 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## DB persistence (Phase 24)
+## API wiring (Phase 25)
 
 | Path | Purpose |
 |------|---------|
-| packages/db/src/repos/leads.ts | Lead upsert and list |
-| packages/db/src/repos/claims.ts | Claim insert and active list |
-| packages/db/src/repos/outcomes.ts | Outcome insert and samples |
-| packages/db/src/repos/credits.ts | Idempotent credit grant/spend |
-| packages/db/src/repos/index.ts | Repo exports |
-| packages/db/drizzle/0002_credits_outcomes_columns.sql | Migration |
+| apps/web/src/lib/db.ts | Shared Drizzle client |
+| apps/web/src/app/api/v1/leads/route.ts | List leads from DB |
+| apps/web/src/app/api/v1/claims/route.ts | Claim with DB overlap |
+| apps/web/src/app/api/v1/outcomes/route.ts | Persist + learn |
+| apps/web/src/app/api/webhooks/paddle/route.ts | Credit grant persist |
 
-## Learning (23) · Claims (22) · API (21) · Marketing (20) · Dashboard (19)
+## DB repos (24) · Learning (23) · Claims (22) · Marketing (20) · Dashboard (19)
