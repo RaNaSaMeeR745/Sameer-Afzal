@@ -28,3 +28,10 @@ export {
   ensureEntity,
   type EnsureEntityInput,
 } from "./entities.js";
+
+export {
+  insertProofAsset,
+  getProofByShareToken,
+  incrementProofViewCount,
+  type InsertProofAssetInput,
+} from "./proof.js";
