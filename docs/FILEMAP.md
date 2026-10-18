@@ -1,11 +1,14 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## Learning (Phase 23)
+## DB persistence (Phase 24)
 
 | Path | Purpose |
 |------|---------|
-| packages/core/src/learning.ts | Weight learning |
-| packages/core/src/learning.test.ts | Unit tests |
-| apps/web/src/app/api/v1/outcomes/route.ts | POST outcomes |
+| packages/db/src/repos/leads.ts | Lead upsert and list |
+| packages/db/src/repos/claims.ts | Claim insert and active list |
+| packages/db/src/repos/outcomes.ts | Outcome insert and samples |
+| packages/db/src/repos/credits.ts | Idempotent credit grant/spend |
+| packages/db/src/repos/index.ts | Repo exports |
+| packages/db/drizzle/0002_credits_outcomes_columns.sql | Migration |
 
-## Claims (22) · API (21) · Marketing (20) · Dashboard (19)
+## Learning (23) · Claims (22) · API (21) · Marketing (20) · Dashboard (19)
