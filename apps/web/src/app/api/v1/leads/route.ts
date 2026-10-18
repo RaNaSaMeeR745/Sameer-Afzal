@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
+import { listTenantLeads } from "@scoutline/db";
 import { loadApiKeysFromEnv, resolveApiKey } from "@/lib/api-auth";
+import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export interface LeadListItem {
   id: string;
-  entityName: string;
-  domain: string | null;
+  entityId: string;
   score: number;
   freshnessClass: "fresh" | "contested" | "served";
   status: string;
@@ -26,7 +27,7 @@ export interface LeadListResponse {
 /**
  * GET /api/v1/leads
  * Authorization: Bearer <api_key>
- * Returns tenant leads. Empty list until worker persistence is connected.
+ * Lists tenant leads from the database when DATABASE_URL is set.
  */
 export async function GET(request: Request) {
   const keys = loadApiKeysFromEnv();
@@ -44,20 +45,51 @@ export async function GET(request: Request) {
     100,
     Math.max(1, Number(url.searchParams.get("pageSize") ?? "20") || 20),
   );
-  const freshness = url.searchParams.get("freshness");
-
-  // Persistence not wired: return an empty, correctly shaped page for the tenant.
-  const data: LeadListItem[] = [];
-  if (freshness && !["fresh", "contested", "served"].includes(freshness)) {
+  const freshnessParam = url.searchParams.get("freshness");
+  if (
+    freshnessParam &&
+    !["fresh", "contested", "served"].includes(freshnessParam)
+  ) {
     return NextResponse.json(
       { error: "invalid_freshness", message: "Use fresh, contested, or served" },
       { status: 400 },
     );
   }
+  const freshness = freshnessParam as
+    | "fresh"
+    | "contested"
+    | "served"
+    | undefined;
+
+  const db = getDb();
+  if (!db) {
+    const body: LeadListResponse = {
+      data: [],
+      pagination: { page, pageSize, total: 0 },
+      tenantId: auth.tenantId,
+    };
+    return NextResponse.json(body);
+  }
+
+  const result = await listTenantLeads(db, {
+    tenantId: auth.tenantId,
+    page,
+    pageSize,
+    freshness,
+  });
+
+  const data: LeadListItem[] = result.data.map((row) => ({
+    id: row.id,
+    entityId: row.entityId,
+    score: row.score,
+    freshnessClass: row.freshnessClass as LeadListItem["freshnessClass"],
+    status: row.status,
+    serviceKey: row.serviceKey,
+  }));
 
   const body: LeadListResponse = {
     data,
-    pagination: { page, pageSize, total: 0 },
+    pagination: result.pagination,
     tenantId: auth.tenantId,
   };
 
