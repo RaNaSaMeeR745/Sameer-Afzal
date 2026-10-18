@@ -2,26 +2,26 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 26
+## Phase 0 through Phase 27
 
-**Status:** done (docs through worker score-and-persist)
+**Status:** done (docs through pipeline workers)
 
-## Phase 27: Pipeline queue workers
+## Phase 28: Proof share tokens and auto-enqueue
 
-**Goal:** discover → enrich → audit → score chain with prove and message workers.
+**Goal:** After score, generate proof, store share token, draft message.
 
 **Tasks:**
-- [x] Adapter registry with canonical ids and aliases
-- [x] runDiscover, runEnrich, runAuditJob, runProve, runMessage
-- [x] BullMQ workers chaining discover→enrich→audit→score
-- [x] Worker package deps on sources, enrich, audit, ai
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] insertProofAsset / getProofByShareToken / incrementProofViewCount
+- [x] runProve persists HTML + share token
+- [x] score worker enqueues prove on success
+- [x] prove worker enqueues message with share URL
+- [x] GET /api/v1/proof/[shareToken] public HTML
+- [x] Update API.md, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for queue processors. Prove/message are started but not auto-enqueued from score yet (callers add jobs when share tokens exist).
+**Blockers:** none. Large HTML stored in html_ref text column is fine for MVP; object storage can replace later.
 
 ## Later phases
 
 - 30-day validation (Phase 35)
-- Auto-enqueue prove/message after successful score with share token persistence
