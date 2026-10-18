@@ -2,26 +2,26 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 25
+## Phase 0 through Phase 26
 
-**Status:** done (docs through API DB wiring)
+**Status:** done (docs through worker score-and-persist)
 
-## Phase 26: Worker score-and-persist
+## Phase 27: Pipeline queue workers
 
-**Goal:** Persist scored leads from the worker pipeline.
+**Goal:** discover → enrich → audit → score chain with prove and message workers.
 
 **Tasks:**
-- [x] ensureEntity (domain match or insert)
-- [x] runScoreAndPersist: score, claims freshness, upsertTenantLead, optional credit spend
-- [x] packages/worker with BullMQ score queue consumer
-- [x] QUEUE_NAMES for full pipeline
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN, ARCHITECTURE note
+- [x] Adapter registry with canonical ids and aliases
+- [x] runDiscover, runEnrich, runAuditJob, runProve, runMessage
+- [x] BullMQ workers chaining discover→enrich→audit→score
+- [x] Worker package deps on sources, enrich, audit, ai
+- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for score path. Discover/enrich/audit queue processors remain to be attached.
+**Blockers:** none for queue processors. Prove/message are started but not auto-enqueued from score yet (callers add jobs when share tokens exist).
 
 ## Later phases
 
 - 30-day validation (Phase 35)
-- Remaining queue workers (discover, enrich, audit, prove, message)
+- Auto-enqueue prove/message after successful score with share token persistence
