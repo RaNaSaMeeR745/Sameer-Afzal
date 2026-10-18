@@ -208,6 +208,11 @@ export const outcomes = pgTable(
       .references(() => tenantLeads.id, { onDelete: "cascade" }),
     result: text("result").notNull(),
     reason: text("reason"),
+    /** Snapshot of score breakdown at outcome time for learning. */
+    scoreBreakdown: jsonb("score_breakdown")
+      .$type<Record<string, unknown>>()
+      .default({})
+      .notNull(),
     recordedAt: timestamp("recorded_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -267,7 +272,7 @@ export const suppressions = pgTable(
   ],
 );
 
-/** Append-only credit ledger. */
+/** Append-only credit ledger with idempotent event keys. */
 export const creditsLedger = pgTable(
   "credits_ledger",
   {
@@ -275,14 +280,20 @@ export const creditsLedger = pgTable(
     tenantId: uuid("tenant_id")
       .notNull()
       .references(() => tenants.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull().default("grant"),
     delta: integer("delta").notNull(),
     reason: text("reason").notNull(),
+    /** External idempotency key (Paddle event id, job id). */
+    eventId: text("event_id").notNull(),
     referenceId: uuid("reference_id"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
   },
-  (t) => [index("credits_ledger_tenant_idx").on(t.tenantId)],
+  (t) => [
+    index("credits_ledger_tenant_idx").on(t.tenantId),
+    uniqueIndex("credits_ledger_event_uidx").on(t.eventId),
+  ],
 );
 
 /** API keys for the public API. */
