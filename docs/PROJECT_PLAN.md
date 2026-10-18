@@ -2,26 +2,29 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 22
+## Phase 0 through Phase 23
 
-**Status:** done (docs through exclusivity claims)
+**Status:** done (docs through outcome learning)
 
-## Phase 23: Learning from outcomes
+## Phase 24: DB persistence for pipeline writes
 
-**Goal:** Per-tenant score weight learning after 30+ outcomes, explained in UI terms.
+**Goal:** Repository layer for leads, claims, outcomes, and credit ledger.
 
 **Tasks:**
-- [x] learnWeightsFromOutcomes wrapper with readiness and explanation
-- [x] explainWeightDeltas for dashboard copy
-- [x] Unit tests (below threshold / mixed wins-losses)
-- [x] POST /api/v1/outcomes
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN, API.md
+- [x] credits_ledger: kind + unique event_id for idempotency
+- [x] outcomes: score_breakdown snapshot column
+- [x] upsertTenantLead / listTenantLeads
+- [x] insertClaim / listActiveClaimsForEntity
+- [x] insertOutcome / listOutcomeSamplesForTenant
+- [x] persistGrant / persistSpend using @scoutline/billing pure logic
+- [x] SQL migration 0002; export repos from package entry
+- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for pure learning. Durable outcome storage still pending.
+**Blockers:** none for repositories. API routes still need DATABASE_URL wiring to call these helpers in production requests.
 
 ## Later phases
 
+- Wire API routes to repositories (leads list, claims, outcomes, paddle grants)
 - 30-day validation (Phase 35)
-- DB persistence of leads, claims, outcomes, and credit ledger
