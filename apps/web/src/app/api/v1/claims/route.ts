@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
-import { tryCreateClaim } from "@scoutline/core";
+import {
+  tryCreateClaim,
+  type ExclusivityClaim,
+} from "@scoutline/core";
+import { insertClaim, listActiveClaimsForEntity } from "@scoutline/db";
 import { loadApiKeysFromEnv, resolveApiKey } from "@/lib/api-auth";
+import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -8,8 +13,7 @@ export const dynamic = "force-dynamic";
  * POST /api/v1/claims
  * Body: { entityId, niche?, geography?, ttlMs? }
  * Creates an exclusivity claim for the authenticated tenant.
- * In-memory only until claims table persistence is connected; response still
- * returns the decided claim object from pure tryCreateClaim logic.
+ * Overlap checks use active claims from the database when available.
  */
 export async function POST(request: Request) {
   const keys = loadApiKeysFromEnv();
@@ -40,8 +44,22 @@ export async function POST(request: Request) {
     );
   }
 
-  // Without a shared claims store, overlapping checks against other tenants
-  // use an empty list here. Persistence phase will pass active claims from DB.
+  const db = getDb();
+  let existing: ExclusivityClaim[] = [];
+
+  if (db) {
+    const rows = await listActiveClaimsForEntity(db, body.entityId);
+    existing = rows.map((r) => ({
+      id: r.id,
+      tenantId: r.tenantId,
+      entityId: r.entityId,
+      niche: r.niche,
+      geography: r.geography,
+      createdAt: r.createdAt.toISOString(),
+      expiresAt: r.expiresAt.toISOString(),
+    }));
+  }
+
   const decision = tryCreateClaim(
     {
       id: crypto.randomUUID(),
@@ -51,7 +69,7 @@ export async function POST(request: Request) {
       geography: body.geography ?? null,
       ttlMs: body.ttlMs,
     },
-    [],
+    existing,
   );
 
   if (!decision.ok) {
@@ -60,6 +78,32 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: decision.reason },
       { status },
+    );
+  }
+
+  if (db) {
+    const row = await insertClaim(db, {
+      id: decision.claim.id,
+      tenantId: decision.claim.tenantId,
+      entityId: decision.claim.entityId,
+      niche: decision.claim.niche,
+      geography: decision.claim.geography,
+      expiresAt: new Date(decision.claim.expiresAt),
+      createdAt: new Date(decision.claim.createdAt),
+    });
+    return NextResponse.json(
+      {
+        claim: {
+          id: row.id,
+          tenantId: row.tenantId,
+          entityId: row.entityId,
+          niche: row.niche,
+          geography: row.geography,
+          createdAt: row.createdAt.toISOString(),
+          expiresAt: row.expiresAt.toISOString(),
+        },
+      },
+      { status: 201 },
     );
   }
 
