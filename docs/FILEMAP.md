@@ -1,13 +1,12 @@
 # FILEMAP.md - Complete File Inventory for Scoutline
 
-## API wiring (Phase 25)
+## Worker (Phase 26)
 
 | Path | Purpose |
 |------|---------|
-| apps/web/src/lib/db.ts | Shared Drizzle client |
-| apps/web/src/app/api/v1/leads/route.ts | List leads from DB |
-| apps/web/src/app/api/v1/claims/route.ts | Claim with DB overlap |
-| apps/web/src/app/api/v1/outcomes/route.ts | Persist + learn |
-| apps/web/src/app/api/webhooks/paddle/route.ts | Credit grant persist |
+| packages/worker/src/jobs/score-and-persist.ts | Score + persist lead |
+| packages/worker/src/queues.ts | Queue names |
+| packages/worker/src/index.ts | Worker entry |
+| packages/db/src/repos/entities.ts | ensureEntity |
 
-## DB repos (24) · Learning (23) · Claims (22) · Marketing (20) · Dashboard (19)
+## API wiring (25) · DB repos (24) · Learning (23) · Claims (22)
