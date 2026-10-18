@@ -8,6 +8,7 @@ import {
   type ExclusivityClaim,
   type FreshnessClass,
   type IcpProfile,
+  type ScoreBreakdown,
   type ScoringWeights,
 } from "@scoutline/core";
 import {
@@ -42,17 +43,29 @@ export interface ScoreAndPersistPayload {
   spendCredit?: boolean;
   /** Idempotency key for credit spend (defaults to tenant+entity domain). */
   creditEventId?: string;
+  /** When true (default), caller should enqueue prove after success. */
+  enqueueProve?: boolean;
+  serviceLabel?: string | null;
+  preparedBy?: string;
 }
 
 export interface ScoreAndPersistResult {
   rejected: boolean;
   rejectReason: string | null;
   score: number;
+  breakdown: ScoreBreakdown | null;
+  findings: AuditFinding[];
   freshnessClass: FreshnessClass;
   leadId: string | null;
   entityId: string | null;
+  entityName: string;
+  entityDomain: string | null;
+  serviceKey: string | null;
+  serviceLabel: string | null;
+  preparedBy: string;
   creditSpent: boolean;
   creditReason: string | null;
+  enqueueProve: boolean;
 }
 
 function getDbFromEnv(): Db {
@@ -107,16 +120,28 @@ export async function runScoreAndPersist(
     weights: payload.weights,
   });
 
+  const baseMeta = {
+    entityName: payload.entity.canonicalName,
+    entityDomain: payload.entity.domain ?? entityRow.domain,
+    serviceKey: payload.serviceKey ?? null,
+    serviceLabel: payload.serviceLabel ?? payload.serviceKey ?? null,
+    preparedBy: payload.preparedBy ?? "Scoutline",
+    enqueueProve: payload.enqueueProve !== false,
+  };
+
   if (scored.rejected) {
     return {
       rejected: true,
       rejectReason: scored.rejectReason,
       score: scored.score,
+      breakdown: null,
+      findings: payload.findings,
       freshnessClass,
       leadId: null,
       entityId: entityRow.id,
       creditSpent: false,
       creditReason: null,
+      ...baseMeta,
     };
   }
 
@@ -153,10 +178,13 @@ export async function runScoreAndPersist(
     rejected: false,
     rejectReason: null,
     score: scored.score,
+    breakdown: scored.breakdown,
+    findings: payload.findings,
     freshnessClass,
     leadId: lead.id,
     entityId: entityRow.id,
     creditSpent,
     creditReason,
+    ...baseMeta,
   };
 }
