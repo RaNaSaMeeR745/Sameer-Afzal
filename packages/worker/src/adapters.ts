@@ -30,11 +30,11 @@ export function getSourceAdapter(adapterId: string): SourceAdapter {
       }
       return new CompaniesHouseAdapter({ apiKey: key });
     }
-    case "us_edgar":
+    case "us_sec_edgar":
       return new EdgarAdapter();
-    case "crtsh":
+    case "certificate_transparency_crtsh":
       return new CrtShAdapter();
-    case "hn_algolia":
+    case "hackernews_algolia":
       return new HnAlgoliaAdapter();
     case "adzuna_jobs": {
       const appId = process.env.ADZUNA_APP_ID;
@@ -71,9 +71,11 @@ function normalizeAdapterId(raw: string): string {
     osm: "openstreetmap_overpass",
     osm_agency: "openstreetmap_agency",
     companies_house: "uk_companies_house",
-    edgar: "us_edgar",
+    edgar: "us_sec_edgar",
+    crtsh: "certificate_transparency_crtsh",
     adzuna: "adzuna_jobs",
-    hn: "hn_algolia",
+    hn: "hackernews_algolia",
+    hn_algolia: "hackernews_algolia",
     meta: "meta_ad_library",
     brave: "brave_search",
   };
@@ -84,9 +86,9 @@ export const SOURCE_ADAPTER_IDS = [
   "openstreetmap_overpass",
   "openstreetmap_agency",
   "uk_companies_house",
-  "us_edgar",
-  "crtsh",
-  "hn_algolia",
+  "us_sec_edgar",
+  "certificate_transparency_crtsh",
+  "hackernews_algolia",
   "adzuna_jobs",
   "meta_ad_library",
   "brave_search",
