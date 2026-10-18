@@ -23,3 +23,8 @@ export {
   persistGrant,
   persistSpend,
 } from "./credits.js";
+
+export {
+  ensureEntity,
+  type EnsureEntityInput,
+} from "./entities.js";
