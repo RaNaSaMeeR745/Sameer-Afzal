@@ -2,29 +2,28 @@
 
 Phases are sized for 15 to 20 minutes of focused work. Status values: not started, in progress, done, blocked.
 
-## Phase 0 through Phase 23
+## Phase 0 through Phase 24
 
-**Status:** done (docs through outcome learning)
+**Status:** done (docs through DB repositories)
 
-## Phase 24: DB persistence for pipeline writes
+## Phase 25: Wire API routes to repositories
 
-**Goal:** Repository layer for leads, claims, outcomes, and credit ledger.
+**Goal:** Production paths use DATABASE_URL when configured.
 
 **Tasks:**
-- [x] credits_ledger: kind + unique event_id for idempotency
-- [x] outcomes: score_breakdown snapshot column
-- [x] upsertTenantLead / listTenantLeads
-- [x] insertClaim / listActiveClaimsForEntity
-- [x] insertOutcome / listOutcomeSamplesForTenant
-- [x] persistGrant / persistSpend using @scoutline/billing pure logic
-- [x] SQL migration 0002; export repos from package entry
-- [x] Update FILEMAP, HISTORY, PROJECT_PLAN
+- [x] apps/web/src/lib/db.ts getDb helper
+- [x] GET /api/v1/leads → listTenantLeads
+- [x] POST /api/v1/claims → listActiveClaimsForEntity + insertClaim
+- [x] POST /api/v1/outcomes → insertOutcome + listOutcomeSamplesForTenant
+- [x] POST /api/webhooks/paddle → persistGrant (custom_data.tenant_id + plan_key)
+- [x] Document SCOUTLINE_API_KEYS in .env.example
+- [x] Update API.md, FILEMAP, HISTORY, PROJECT_PLAN
 
 **Status:** done
 
-**Blockers:** none for repositories. API routes still need DATABASE_URL wiring to call these helpers in production requests.
+**Blockers:** none. Without DATABASE_URL, routes degrade safely (empty list or in-memory decision only).
 
 ## Later phases
 
-- Wire API routes to repositories (leads list, claims, outcomes, paddle grants)
 - 30-day validation (Phase 35)
+- Worker job that writes leads via upsertTenantLead
