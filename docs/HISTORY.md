@@ -4,32 +4,24 @@ Newest entries at the bottom.
 
 ## 2026-09-29 | phase-0 | documentation bootstrap
 
-## 2026-10-04 through 2026-10-18 | phase-1 through phase-27
+## 2026-10-04 through 2026-10-18 | phase-1 through phase-28
 
-Pipeline through queue workers.
-
-## 2026-10-18 | phase-28 | proof tokens and auto-enqueue
-
-Goal: Deliver proof reports and outreach drafts after scoring.
-
-Done:
-- packages/db proof repos: insert, lookup by shareToken, view count
-- runProve stores share token and HTML
-- score to prove to message queue chain
-- GET /api/v1/proof/:shareToken serves public HTML
-
-Achieved: End-to-end path from discover job to shareable proof and message draft.
+Pipeline through proof share tokens.
 
 ## 2026-10-24 | phase-35 | 30-day validation plan
 
-Goal: Document measurable go/no-go criteria and a four-week operator schedule.
+Operator metrics and weekly schedule documented.
+
+## 2026-10-24 | phase-36 | API rate limits and lead detail
+
+Goal: Enforce request budgets and expose single-lead reads.
 
 Done:
-- PROJECT_PLAN Phase 35: prerequisites, success metrics table, week-by-week tasks
-- STRATEGY: cost-per-lead validation log placeholder structure with verification date
-- SECURITY: validation-period checklist items tied to RLS and credit integrity
-- FILEMAP and HISTORY updated
+- apps/web/src/lib/rate-limit.ts: 60 requests per minute per tenant
+- Rate limit on leads list, leads/:id, claims, outcomes
+- getTenantLeadById + GET /api/v1/leads/:id
+- API.md documents headers and 429 behavior
 
-Achieved: Operators can execute validation without inventing metrics. Code phases through 28 remain the implementation baseline.
+Achieved: Public API is harder to abuse and operators can fetch one lead by id.
 
-Next: Operator runs day-0 environment checklist; engineering returns for rate limits, lead detail, or object storage after go decision.
+Next: POST /api/v1/searches, or operator day-0 validation checklist.
