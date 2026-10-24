@@ -10,6 +10,7 @@ import {
 } from "@scoutline/db";
 import { loadApiKeysFromEnv, resolveApiKey } from "@/lib/api-auth";
 import { getDb } from "@/lib/db";
+import { consumeRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,14 @@ export async function POST(request: Request) {
     );
   }
 
+  const limited = consumeRateLimit(`api:${auth.tenantId}`);
+  if (!limited.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited", message: "Too many requests" },
+      { status: 429, headers: rateLimitHeaders(limited) },
+    );
+  }
+
   let body: {
     leadId?: string;
     result?: "replied" | "call_booked" | "won" | "lost";
@@ -44,7 +53,10 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as typeof body;
   } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    return NextResponse.json(
+      { error: "invalid_json" },
+      { status: 400, headers: rateLimitHeaders(limited) },
+    );
   }
 
   const db = getDb();
@@ -53,7 +65,10 @@ export async function POST(request: Request) {
 
   if (body.leadId && body.result) {
     if (!["replied", "call_booked", "won", "lost"].includes(body.result)) {
-      return NextResponse.json({ error: "invalid_result" }, { status: 400 });
+      return NextResponse.json(
+        { error: "invalid_result" },
+        { status: 400, headers: rateLimitHeaders(limited) },
+      );
     }
     if (db) {
       const row = await insertOutcome(db, {
@@ -70,8 +85,14 @@ export async function POST(request: Request) {
     }
   } else if (Array.isArray(body.samples) && body.samples.length > 0) {
     for (const s of body.samples) {
-      if (!s.result || !["replied", "call_booked", "won", "lost"].includes(s.result)) {
-        return NextResponse.json({ error: "invalid_result" }, { status: 400 });
+      if (
+        !s.result ||
+        !["replied", "call_booked", "won", "lost"].includes(s.result)
+      ) {
+        return NextResponse.json(
+          { error: "invalid_result" },
+          { status: 400, headers: rateLimitHeaders(limited) },
+        );
       }
       if (db && s.leadId) {
         const row = await insertOutcome(db, {
@@ -89,7 +110,7 @@ export async function POST(request: Request) {
   } else {
     return NextResponse.json(
       { error: "samples_or_lead_required" },
-      { status: 400 },
+      { status: 400, headers: rateLimitHeaders(limited) },
     );
   }
 
@@ -109,15 +130,18 @@ export async function POST(request: Request) {
 
   const learning = learnWeightsFromOutcomes(samples);
 
-  return NextResponse.json({
-    tenantId: auth.tenantId,
-    persistedIds: persisted,
-    learning: {
-      ready: learning.ready,
-      sampleCount: learning.sampleCount,
-      weights: learning.weights,
-      explanation: learning.explanation,
-      baseline: learning.baseline,
+  return NextResponse.json(
+    {
+      tenantId: auth.tenantId,
+      persistedIds: persisted,
+      learning: {
+        ready: learning.ready,
+        sampleCount: learning.sampleCount,
+        weights: learning.weights,
+        explanation: learning.explanation,
+        baseline: learning.baseline,
+      },
     },
-  });
+    { headers: rateLimitHeaders(limited) },
+  );
 }
