@@ -85,9 +85,20 @@ Flat per workspace, unlimited seats, credit based. One credit equals one fully e
 - Annual billing: two months free.
 - Add-on credit packs, priced so margin stays healthy after LLM and infrastructure costs.
 
-Gross margin target: at least 70 percent after LLM tokens, crawling compute, and storage. Real cost-per-lead calculation will be recorded here once Phase 1 infrastructure costs are known and after the first production pipeline run.
+Gross margin target: at least 70 percent after LLM tokens, crawling compute, and storage.
+
+## Cost-per-lead validation log (Phase 35)
+
+Fill during the 30-day run. Do not invent numbers.
+
+| Date | Delivered leads | Infra cost (USD) | LLM cost (USD) | Source API cost (USD) | Cost per lead (USD) | Notes |
+|------|-----------------|------------------|----------------|----------------------|---------------------|-------|
+| (empty until day-30 close) | | | | | | |
+
+Target: under 0.50 USD fully loaded per delivered lead while quality metrics in PROJECT_PLAN Phase 35 hold. Update this table and the verification date below when the run closes.
 
 Verification dates:
 - Apollo pricing: multiple independent sources July-September 2026
 - Clay pricing: clay.com/pricing and secondary sources August-September 2026
 - SEOptimer pricing: seoptimer.com/pricing and reviews September 2026
+- Validation plan written: 2026-10-24
