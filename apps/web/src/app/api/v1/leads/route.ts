@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { listTenantLeads } from "@scoutline/db";
 import { loadApiKeysFromEnv, resolveApiKey } from "@/lib/api-auth";
 import { getDb } from "@/lib/db";
+import { consumeRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,14 @@ export async function GET(request: Request) {
     );
   }
 
+  const limited = consumeRateLimit(`api:${auth.tenantId}`);
+  if (!limited.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited", message: "Too many requests" },
+      { status: 429, headers: rateLimitHeaders(limited) },
+    );
+  }
+
   const url = new URL(request.url);
   const page = Math.max(1, Number(url.searchParams.get("page") ?? "1") || 1);
   const pageSize = Math.min(
@@ -52,7 +61,7 @@ export async function GET(request: Request) {
   ) {
     return NextResponse.json(
       { error: "invalid_freshness", message: "Use fresh, contested, or served" },
-      { status: 400 },
+      { status: 400, headers: rateLimitHeaders(limited) },
     );
   }
   const freshness = freshnessParam as
@@ -68,7 +77,7 @@ export async function GET(request: Request) {
       pagination: { page, pageSize, total: 0 },
       tenantId: auth.tenantId,
     };
-    return NextResponse.json(body);
+    return NextResponse.json(body, { headers: rateLimitHeaders(limited) });
   }
 
   const result = await listTenantLeads(db, {
@@ -93,5 +102,5 @@ export async function GET(request: Request) {
     tenantId: auth.tenantId,
   };
 
-  return NextResponse.json(body);
+  return NextResponse.json(body, { headers: rateLimitHeaders(limited) });
 }
