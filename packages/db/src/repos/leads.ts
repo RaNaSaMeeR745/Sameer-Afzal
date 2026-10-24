@@ -88,3 +88,17 @@ export async function listTenantLeads(db: Db, options: ListLeadsOptions) {
     pagination: { page, pageSize, total },
   };
 }
+
+/** Fetch one tenant lead by id. Returns null if missing or wrong tenant. */
+export async function getTenantLeadById(
+  db: Db,
+  tenantId: string,
+  leadId: string,
+) {
+  const rows = await db
+    .select()
+    .from(tenantLeads)
+    .where(and(eq(tenantLeads.tenantId, tenantId), eq(tenantLeads.id, leadId)))
+    .limit(1);
+  return rows[0] ?? null;
+}
