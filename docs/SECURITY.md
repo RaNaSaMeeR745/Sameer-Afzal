@@ -37,9 +37,21 @@
 4. Notify affected parties within required timelines
 5. Remediate and post-mortem in DECISIONS.md or a dedicated incident entry in HISTORY.md
 
-## Checklist (to be expanded)
+## Checklist
 
 - [ ] RLS policies written and tested for every tenant table
 - [ ] Secret scanning in CI
 - [ ] Dependency audit in CI
 - [ ] Penetration test before public launch
+
+## Validation period checks (Phase 35, days 1-30)
+
+These must stay green during the 30-day run. Failures are no-go conditions.
+
+- [ ] Two API keys for two different tenant ids cannot list each other's leads
+- [ ] Replaying the same Paddle `event_id` does not grant credits twice
+- [ ] Credit spend for the same `eventId` is idempotent
+- [ ] Public proof URLs expose only the intended HTML, not other tenants' rows
+- [ ] No secrets in logs from discover, enrich, or webhook workers
+- [ ] Human review required before the first 100 outbound messages (no silent auto-send)
+- [ ] Suppression list honored for any address marked do-not-contact
