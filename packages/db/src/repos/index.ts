@@ -1,6 +1,7 @@
 export {
   upsertTenantLead,
   listTenantLeads,
+  getTenantLeadById,
   type UpsertLeadInput,
   type ListLeadsOptions,
 } from "./leads.js";
