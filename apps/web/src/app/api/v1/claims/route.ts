@@ -6,6 +6,7 @@ import {
 import { insertClaim, listActiveClaimsForEntity } from "@scoutline/db";
 import { loadApiKeysFromEnv, resolveApiKey } from "@/lib/api-auth";
 import { getDb } from "@/lib/db";
+import { consumeRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,14 @@ export async function POST(request: Request) {
     );
   }
 
+  const limited = consumeRateLimit(`api:${auth.tenantId}`);
+  if (!limited.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited", message: "Too many requests" },
+      { status: 429, headers: rateLimitHeaders(limited) },
+    );
+  }
+
   let body: {
     entityId?: string;
     niche?: string | null;
@@ -34,13 +43,16 @@ export async function POST(request: Request) {
   try {
     body = (await request.json()) as typeof body;
   } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
+    return NextResponse.json(
+      { error: "invalid_json" },
+      { status: 400, headers: rateLimitHeaders(limited) },
+    );
   }
 
   if (!body.entityId || typeof body.entityId !== "string") {
     return NextResponse.json(
       { error: "entity_id_required" },
-      { status: 400 },
+      { status: 400, headers: rateLimitHeaders(limited) },
     );
   }
 
@@ -77,7 +89,7 @@ export async function POST(request: Request) {
       decision.reason === "already_claimed_by_other" ? 409 : 400;
     return NextResponse.json(
       { error: decision.reason },
-      { status },
+      { status, headers: rateLimitHeaders(limited) },
     );
   }
 
@@ -103,9 +115,12 @@ export async function POST(request: Request) {
           expiresAt: row.expiresAt.toISOString(),
         },
       },
-      { status: 201 },
+      { status: 201, headers: rateLimitHeaders(limited) },
     );
   }
 
-  return NextResponse.json({ claim: decision.claim }, { status: 201 });
+  return NextResponse.json(
+    { claim: decision.claim },
+    { status: 201, headers: rateLimitHeaders(limited) },
+  );
 }
